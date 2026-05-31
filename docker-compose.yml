@@ -1,0 +1,67 @@
+# MindFlow — локальный запуск через Docker Compose.
+#
+# Что поднимает:
+#   • api  — серверное приложение Express (порт 8787 внутри, 8787 наружу)
+#   • web  — статический клиент Vite за nginx (порт 8080 наружу)
+#
+# Что НЕ поднимает:
+#   База данных — Supabase (managed PostgreSQL). Подключение к боевой/тестовой
+#   базе настраивается через переменные окружения в .env (см. env.example).
+#   Это намеренно — Supabase предоставляет Auth, RLS, RPC и pgvector в едином
+#   управляемом сервисе, который сложно полноценно воспроизвести локально.
+#
+# Быстрый старт:
+#   1. cp env.example .env  и заполните минимум:
+#        SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
+#        VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY,
+#        DEEPSEEK_API_KEY
+#   2. docker compose up --build
+#   3. Откройте http://localhost:8080
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: mindflow-api:local
+    container_name: mindflow-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 8787
+    ports:
+      - "8787:8787"
+    volumes:
+      # Кешируем скачанные модели эмбеддера между перезапусками
+      - hf-cache:/app/.cache/huggingface
+    networks:
+      - mindflow
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        VITE_API_BASE_URL: /api
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+        VITE_PLAUSIBLE_DOMAIN: ${VITE_PLAUSIBLE_DOMAIN:-}
+    image: mindflow-web:local
+    container_name: mindflow-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    networks:
+      - mindflow
+
+networks:
+  mindflow:
+    driver: bridge
+
+volumes:
+  hf-cache:
+    driver: local

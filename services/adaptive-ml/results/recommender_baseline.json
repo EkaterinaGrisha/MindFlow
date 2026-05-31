@@ -1,0 +1,66 @@
+{
+  "model": "DKT-based next-concept recommender",
+  "data": "synthetic_seed_42",
+  "n_concepts": 24,
+  "split": {
+    "train": 400,
+    "test": 100,
+    "by": "student_id"
+  },
+  "k_list": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "zpd_target_p": 0.7,
+  "strategies": [
+    {
+      "name": "Random",
+      "note": "uniform top-K, reference floor",
+      "hit@1": 0.0428,
+      "hit@3": 0.1232,
+      "hit@5": 0.2097,
+      "hit@10": 0.4192
+    },
+    {
+      "name": "Most-frequent",
+      "note": "population prior, no personalization",
+      "hit@1": 0.0411,
+      "hit@3": 0.1236,
+      "hit@5": 0.2087,
+      "hit@10": 0.4168
+    },
+    {
+      "name": "Sticky (last concept)",
+      "note": "behavioral baseline — students tend to stay on the same concept",
+      "hit@1": 0.6787,
+      "hit@3": 0.7062,
+      "hit@5": 0.7326,
+      "hit@10": 0.802
+    },
+    {
+      "name": "DKT-ZPD (P≈0.7)",
+      "note": "rank concepts by closeness to 0.7 — Vygotsky's zone of proximal development",
+      "hit@1": 0.0317,
+      "hit@3": 0.0795,
+      "hit@5": 0.1254,
+      "hit@10": 0.2394
+    },
+    {
+      "name": "DKT-uncertainty (P≈0.5)",
+      "note": "rank concepts by closeness to 0.5 — max information gain per attempt",
+      "hit@1": 0.0378,
+      "hit@3": 0.0891,
+      "hit@5": 0.1345,
+      "hit@10": 0.2462
+    }
+  ],
+  "random_floor_expected": {
+    "hit@1": 0.0417,
+    "hit@3": 0.125,
+    "hit@5": 0.2083,
+    "hit@10": 0.4167
+  },
+  "elapsed_sec": 4.6
+}

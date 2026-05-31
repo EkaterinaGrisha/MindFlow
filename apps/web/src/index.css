@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-headline: "Manrope", sans-serif;
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-primary: #03071d;
+  --color-primary-container: #1a1f36;
+  --color-secondary: #4b41e1;
+  --color-secondary-dim: #c3c0ff;
+  --color-surface: #f8f9fa;
+  --color-surface-container: #edeeef;
+  --color-surface-container-low: #f3f4f5;
+  --color-surface-container-lowest: #ffffff;
+  --color-outline: #77767e;
+  --color-outline-variant: #c7c5ce;
+
+  --color-dossier-cream: #f4ede1;
+  --color-dossier-paper: #faf6ee;
+  --color-dossier-ink:   #0c0c0d;
+  --color-dossier-rule:  #1a1a1c;
+  --color-dossier-accent: #c8511c;
+  --color-dossier-muted: #6b6258;
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-primary font-sans antialiased;
+  }
+}
+
+.bg-mesh-gradient {
+  background-color: #1a1f36;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(245,67%,57%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(265,100%,8%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(245,67%,57%,1) 0, transparent 50%);
+}
+
+.form-input-focus:focus {
+  box-shadow: 0 12px 40px rgba(26, 31, 54, 0.06);
+  outline: none;
+}
+
+/* ─── Lecture export to PDF (window.print) ──────────────────────────────────
+   When the user clicks "Экспорт в PDF" we toggle `.lecture-printing` on
+   <body> and call window.print(). Browser shows native dialog with
+   "Save as PDF" option. We hide the app chrome and let the lecture take
+   the full page; avoid breaking cards/figures across pages.
+*/
+@media print {
+  /* Hide top-level chrome (sidebar, mobile bar, footer) and any opt-out element */
+  aside, nav, footer, .lecture-no-print { display: none !important; }
+  /* TopBar is a sticky <header> just under the Layout root; the lecture's
+     own <header> lives inside .lecture-root and must stay visible. */
+  body > div > div > header { display: none !important; }
+
+  body { background: white !important; color: #1e293b !important; }
+
+  /* Stretch main content to full width (Layout uses lg:ml-64 for sidebar offset) */
+  main, [class*="lg:ml-"], [class*="ml-64"] { margin-left: 0 !important; padding: 0 !important; }
+
+  /* Keep visual blocks intact across page breaks */
+  .lecture-card, .lecture-fbox, .lecture-figure {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .lecture-section { break-inside: avoid-page; }
+
+  /* Native shadows look noisy on paper */
+  .lecture-card { box-shadow: none !important; }
+}

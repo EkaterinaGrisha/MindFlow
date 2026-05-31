@@ -1,0 +1,26 @@
+{
+  "name": "mindflow-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "npm run start --workspace=@mindflow/api",
+    "dev": "npm run dev -w @mindflow/web",
+    "dev:web": "npm run dev -w @mindflow/web",
+    "dev:api": "npm run dev -w @mindflow/api",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:llm-routing": "npm run test:llm-routing -w @mindflow/api",
+    "test:rag-corpus": "python3 -m unittest tests/test_prepare_rag_corpus.py"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}

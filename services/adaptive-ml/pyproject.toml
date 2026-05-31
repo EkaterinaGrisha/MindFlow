@@ -1,0 +1,19 @@
+[project]
+name = "mindflow-adaptive-ml"
+version = "0.1.0"
+description = "Adaptive learning models for MindFlow: BKT baseline + DKT (planned)."
+authors = [{ name = "Ekaterina Grigoreva" }]
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.24",
+  "scikit-learn>=1.3",
+]
+
+[project.optional-dependencies]
+dkt = [
+  "torch>=2.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

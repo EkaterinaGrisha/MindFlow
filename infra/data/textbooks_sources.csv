@@ -1,0 +1,19 @@
+id,title,url,source_type,license_status,include_in_rag,notes
+yandex_handbook_math,Справочник Яндекс по математике для анализа данных,https://education.yandex.ru/handbook/math,web_page,unknown,false,Добавлено в список литературы как онлайн-источник
+kostrikin_part2,Введение в алгебру. Часть 2. Линейная алгебра,,direct_pdf,unknown,true,Классический русский учебник по линейной алгебре
+kostrikin_part1,Введение в алгебру. Часть 1. Основы алгебры,,direct_pdf,unknown,true,Классический русский учебник по алгебре
+kostrikin_taskbook,Сборник задач по алгебре,,direct_pdf,unknown,true,Задачник к курсу алгебры Кострикина
+bogomolov_list,Список по геометрии,http://gorod.bogomolov-lab.ru/ps/stud/geom_ru/2122/list.html,web_page,unknown,false,Список литературы
+techlibrary_2014,Неуточненный учебник (2014),"https://techlibrary.ru/b2/2k1a1k1v1u1m1m1j1o_2h.2h.,_2x1f1o1s1l1p1k_2h.2j.,_2z1n1j1r1o1p1c_2z.2j._2p1a1e1a1y1j_1q1p_1m1j1o1f1k1o1p1k_1a1m1d1f1b1r1f_1j_1d1f1p1n1f1t1r1j1j._2014.pdf",direct_pdf,unknown,false,Требуется идентификация и права
+local_zadachi,Локальный файл пользователя,file:./local/zadachi_i_teoremy.pdf,local_file,private,false,Нельзя автоматически загрузить из локального пути
+techlibrary_2019,Курс теории вероятностей и матстатистики (2019),https://techlibrary.ru/b2/2z1f1c1a1s1t2d2g1o1p1c_2i.2h._2s1u1r1s_1t1f1p1r1j1j_1c1f1r1p2g1t1o1p1s1t1f1k_1j_1n1a1t1f1n1a1t1j1y1f1s1l1p1k_1s1t1a1t1j1s1t1j1l1j._2019.pdf,direct_pdf,unknown,false,Требуется подтверждение прав
+ysu_pdf,Учебный материал YSU,http://lib.ysu.am/disciplines_bk/d41af2c39b6577e2263079aa1a898ea5.pdf,direct_pdf,unknown,false,Проверить право на повторное распространение
+lagutin,Наглядная математическая статистика,https://ditimaths.wordpress.com/wp-content/uploads/2017/10/lagutin_naglyadnaya_matematicheskaya_statistika.pdf,direct_pdf,unknown,false,Проверить лицензию
+yangiasr,Неуточненный учебник (Yangiasr),https://yangiasr.uz/files/books/2024-02-08-11-41-22_1f24ba414e9b177d64616bb8086d1c82.pdf,direct_pdf,unknown,false,Проверить источник
+local_shiryaev,Локальный файл пользователя (Ширяев),file:./local/veroyatnost_1_shiryaev.pdf,local_file,private,false,Нельзя автоматически загрузить из локального пути
+hefferon,Hefferon — Linear Algebra,,direct_pdf,cc-by-sa-4.0,true,Бесплатный open-source учебник по линейной алгебре
+mit_18_06,MIT 18.06 — Linear Algebra (Zoom Lecture Notes),,direct_pdf,cc-by-nc-sa-2.0,true,Лекции Gilbert Strang с MIT OpenCourseWare
+ysu_open,Открытая книга YSU,http://lib.ysu.am/open_books/63719.pdf,direct_pdf,unknown,false,Проверить условия использования
+physics_az,Учебник physics.gov.az,http://www.physics.gov.az/book_K/Fixt1.pdf,direct_pdf,unknown,false,Проверить условия использования
+demidovich,Сборник задач Демидовича,https://kvm.gubkin.ru/pub/uok/Demidovich.pdf,direct_pdf,unknown,false,Проверить лицензию
+zorich,Зорич. Математический анализ. Книга I,https://matan.math.msu.su/media/uploads/2020/03/V.A.Zorich-Kniga-I-10-izdanie-Corr.pdf,direct_pdf,unknown,false,Проверить право использования в RAG

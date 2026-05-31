@@ -1,0 +1,67 @@
+{
+  "model": "DKT_piech_lstm",
+  "data": "synthetic",
+  "n_students": 500,
+  "n_concepts": 24,
+  "attempts_lambda": 30.0,
+  "split": {
+    "train": 400,
+    "test": 100,
+    "by": "student_id"
+  },
+  "arch": {
+    "embed_dim": 50,
+    "hidden_dim": 64,
+    "lstm_layers": 1,
+    "dropout": 0.2,
+    "n_params": 33656
+  },
+  "train": {
+    "epochs": 30,
+    "batch_size": 32,
+    "lr": 0.001,
+    "optimizer": "Adam",
+    "loss": "BCEWithLogits",
+    "grad_clip": 5.0,
+    "device": "mps",
+    "seed": 42
+  },
+  "metrics": {
+    "auc": 0.724,
+    "accuracy": 0.8168,
+    "rmse": 0.37
+  },
+  "training_loss_curve": [
+    0.65866,
+    0.57971,
+    0.49829,
+    0.47205,
+    0.4636,
+    0.45703,
+    0.45225,
+    0.44787,
+    0.44434,
+    0.44303,
+    0.44206,
+    0.44103,
+    0.44291,
+    0.44085,
+    0.43892,
+    0.43838,
+    0.43784,
+    0.43756,
+    0.43716,
+    0.43705,
+    0.43581,
+    0.43601,
+    0.43533,
+    0.43474,
+    0.43508,
+    0.43455,
+    0.43384,
+    0.43459,
+    0.43286,
+    0.43311
+  ],
+  "elapsed_sec": 122.7
+}

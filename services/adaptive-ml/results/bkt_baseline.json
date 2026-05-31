@@ -1,0 +1,83 @@
+{
+  "model": "BKT_classic_em",
+  "data": "synthetic",
+  "n_students": 500,
+  "n_concepts": 24,
+  "attempts_lambda": 30.0,
+  "split": {
+    "train": 400,
+    "test": 100,
+    "by": "student_id"
+  },
+  "em_iters": 30,
+  "seed": 42,
+  "metrics": {
+    "auc": 0.7694,
+    "accuracy": 0.8414,
+    "rmse": 0.35,
+    "param_mae": 0.0141
+  },
+  "fitted_params_sample": [
+    {
+      "concept_idx": 0,
+      "fitted": {
+        "p_init": 0.395,
+        "p_learn": 0.176,
+        "p_slip": 0.134,
+        "p_guess": 0.195
+      },
+      "true": {
+        "p_init": 0.355,
+        "p_learn": 0.166,
+        "p_slip": 0.136,
+        "p_guess": 0.22
+      }
+    },
+    {
+      "concept_idx": 1,
+      "fitted": {
+        "p_init": 0.229,
+        "p_learn": 0.23,
+        "p_slip": 0.123,
+        "p_guess": 0.25
+      },
+      "true": {
+        "p_init": 0.219,
+        "p_learn": 0.246,
+        "p_slip": 0.126,
+        "p_guess": 0.229
+      }
+    },
+    {
+      "concept_idx": 2,
+      "fitted": {
+        "p_init": 0.251,
+        "p_learn": 0.17,
+        "p_slip": 0.087,
+        "p_guess": 0.254
+      },
+      "true": {
+        "p_init": 0.226,
+        "p_learn": 0.168,
+        "p_slip": 0.087,
+        "p_guess": 0.243
+      }
+    },
+    {
+      "concept_idx": 3,
+      "fitted": {
+        "p_init": 0.355,
+        "p_learn": 0.213,
+        "p_slip": 0.094,
+        "p_guess": 0.176
+      },
+      "true": {
+        "p_init": 0.329,
+        "p_learn": 0.223,
+        "p_slip": 0.094,
+        "p_guess": 0.173
+      }
+    }
+  ],
+  "elapsed_sec": 10.3
+}
