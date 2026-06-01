@@ -1,0 +1,1592 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MindFlow — защита выпускной квалификационной работы</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+/* ── Палитра (взято из apps/web/src/components/math-topic-content) ───────── */
+:root {
+  --text: #1e293b;
+  --muted: #64748b;
+  --mutedLight: #94a3b8;
+  --primary: #6366f1;
+  --primaryLight: #eef2ff;
+  --primaryBorder: #c7d2fe;
+  --primaryDark: #4f46e5;
+  --accent: #7c3aed;
+  --green: #10b981;
+  --greenLight: #d1fae5;
+  --amber: #f59e0b;
+  --amberLight: #fef3c7;
+  --red: #ef4444;
+  --redLight: #fee2e2;
+  --cyan: #06b6d4;
+  --violet: #8b5cf6;
+  --pink: #ec4899;
+  --white: #ffffff;
+  --surface: #f8fafc;
+  --border: #e2e8f0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
+  background: var(--surface);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 4vh 5vw 8vh 5vw;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity .35s ease, transform .35s ease;
+  pointer-events: none;
+  overflow: hidden;
+}
+.slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.slide.prev { transform: translateX(-40px); }
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+.eyebrow .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); margin-right: 8px; vertical-align: middle; }
+
+h1 {
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+h1 .accent { color: var(--primary); }
+
+h2 {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 700;
+  letter-spacing: -.005em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+
+p { font-size: 15px; line-height: 1.55; color: var(--text); }
+p + p { margin-top: 8px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.tiny { font-size: 12px; }
+
+/* ── Сетка карточек ──────────────────────────────────────────────────────── */
+.grid { display: grid; gap: 12px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+.card.tinted { background: var(--primaryLight); border-color: var(--primaryBorder); }
+.card.amber { background: var(--amberLight); border-color: #fde68a; }
+.card.green { background: var(--greenLight); border-color: #a7f3d0; }
+.card.red { background: var(--redLight); border-color: #fecaca; }
+
+.card .title { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.card.tinted .title { color: var(--primaryDark); }
+.card.amber .title { color: #b45309; }
+.card.green .title { color: #047857; }
+.card.red .title { color: #b91c1c; }
+
+.card .big {
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.card .big.primary { color: var(--primary); }
+.card .big.green { color: var(--green); }
+.card .big.amber { color: var(--amber); }
+.card .big.red { color: var(--red); }
+
+.card .sub { margin-top: 6px; font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.kpi {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.kpi .v { font-size: 22px; font-weight: 800; color: var(--primary); line-height: 1; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 11px; color: var(--muted); margin-top: 5px; text-transform: uppercase; letter-spacing: .08em; }
+
+ul.bullets { list-style: none; }
+ul.bullets li {
+  position: relative;
+  padding: 7px 0 7px 22px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 2px; top: 15px;
+  width: 6px; height: 6px;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+ol.numbered { list-style: none; counter-reset: step; }
+ol.numbered li {
+  counter-increment: step;
+  position: relative;
+  padding: 9px 0 9px 38px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+ol.numbered li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 8px;
+  width: 26px; height: 26px;
+  background: var(--primary);
+  color: white;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ── Таблицы ─────────────────────────────────────────────────────────────── */
+table.t {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.t thead th {
+  text-align: left;
+  font-weight: 700;
+  padding: 9px 12px;
+  color: var(--muted);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+table.t tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+}
+table.t tbody tr:last-child td { border-bottom: none; }
+table.t tbody tr.highlight td {
+  background: var(--primaryLight);
+  font-weight: 700;
+  color: var(--primaryDark);
+}
+table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', monospace; }
+
+/* ── Pipeline ────────────────────────────────────────────────────────────── */
+.pipeline { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.pipeline .step {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+.pipeline .step .n {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+.pipeline .step .body { flex: 1; }
+.pipeline .step .name { font-weight: 700; font-size: 13px; color: var(--text); }
+.pipeline .step .desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: var(--primaryLight);
+  color: var(--primaryDark);
+}
+.badge.green { background: var(--greenLight); color: #047857; }
+.badge.amber { background: var(--amberLight); color: #b45309; }
+.badge.red { background: var(--redLight); color: #b91c1c; }
+.badge.muted { background: var(--surface); color: var(--muted); }
+
+.chart-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  position: relative;
+}
+.chart-wrap canvas { max-height: 100%; }
+.chart-wrap.flex-1 { flex: 1; }
+
+.hud {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 10px 24px;
+  display: flex; align-items: center;
+  gap: 14px;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(255,255,255,0.95), rgba(255,255,255,0));
+}
+.hud-brand {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.hud-progress {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hud-progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  width: 0%;
+  transition: width .35s ease;
+}
+.hud-counter {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.hint {
+  position: absolute;
+  right: 5vw; bottom: 9vh;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.kbd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.mark {
+  display: inline-block;
+  padding: 5px 12px;
+  background: var(--text);
+  color: white;
+  font-weight: 800;
+  letter-spacing: -.005em;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; flex: 1; min-height: 0; align-items: start; }
+.split.balanced { grid-template-columns: 1.1fr 1fr; }
+.split.text-heavy { grid-template-columns: 1.3fr 1fr; }
+.split > * { min-width: 0; }
+
+.flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.caption { font-size: 12px; color: var(--muted); margin-top: 10px; font-style: italic; line-height: 1.5; }
+.note {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 10px 14px;
+  background: var(--surface);
+  border-left: 3px solid var(--primary);
+  border-radius: 6px;
+  line-height: 1.5;
+}
+.note strong { color: var(--text); }
+
+.hero { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+.hero .title {
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 900;
+  letter-spacing: -.04em;
+  line-height: .95;
+  color: var(--text);
+}
+.hero .title .ring {
+  display: inline-block;
+  background: linear-gradient(120deg, var(--primary), var(--accent), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .sub {
+  margin-top: 18px;
+  font-size: 19px;
+  color: var(--muted);
+  max-width: 820px;
+  line-height: 1.45;
+}
+.hero .meta {
+  margin-top: 28px;
+  display: flex; flex-wrap: wrap; gap: 22px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hero .meta span strong { color: var(--text); font-weight: 700; }
+
+/* Двухколоночный список */
+.two-col-list { columns: 2; column-gap: 22px; font-size: 14px; line-height: 1.6; }
+
+/* Тонкая горизонтальная линия */
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ───────────────────────────────────────────── 1. ТИТУЛЬНЫЙ ── -->
+<section class="slide" data-title="Титул">
+  <div class="hero">
+    <span class="mark">ВЫПУСКНАЯ КВАЛИФИКАЦИОННАЯ РАБОТА</span>
+    <h1 class="title" style="margin-top: 22px;">Mind<span class="ring">Flow</span></h1>
+    <p class="sub">Адаптивная образовательная платформа с AI-наставником для самостоятельного освоения математики и основ Data Science</p>
+    <p class="sub" style="margin-top: 12px; font-size: 16px; max-width: 780px;">
+      Разработка и эмпирическая оценка прототипа, обеспечивающего персонализированное, методически корректное и опирающееся на верифицируемые источники обучение.
+    </p>
+    <div class="meta">
+      <span><strong>Григорьева Екатерина</strong></span>
+      <span>2026</span>
+      <span>Регламент защиты: 10 минут</span>
+    </div>
+  </div>
+  <div class="hint">
+    Навигация: <span class="kbd">→</span> <span class="kbd">←</span> <span class="kbd">Space</span> · <span class="kbd">F</span> — fullscreen
+  </div>
+</section>
+
+<!-- ───────────────────────────────────────── 2. АКТУАЛЬНОСТЬ — РЫНОК ── -->
+<section class="slide" data-title="Актуальность · рынок">
+  <div class="eyebrow"><span class="dot"></span>Актуальность работы · рыночная составляющая</div>
+  <h1>Сегмент применения ИИ в образовании <span class="accent">демонстрирует устойчивый рост</span></h1>
+
+  <div class="split balanced" style="margin-top: 8px;">
+    <div>
+      <p>Образовательные технологии стали одним из наиболее динамично растущих сегментов цифровой экономики. По оценкам HolonIQ, мировой рынок EdTech в 2026 году составил приблизительно <strong>404 млрд долларов США</strong> и продолжает расти со среднегодовым темпом около 16 %; к 2030 году прогнозируется его увеличение до <strong>580 млрд долларов</strong>.</p>
+      <p>Внутри этого рынка наиболее динамичным является сегмент применения искусственного интеллекта: при объёме 9,58 млрд долларов в 2026 году он, по консервативному прогнозу, достигнет 137 млрд долларов к 2035 году при среднегодовом темпе роста <strong>порядка 34,5 %</strong>.</p>
+      <p>На российском рынке наблюдается аналогичная тенденция: совокупная выручка ста крупнейших EdTech-компаний по итогам 2025 года составила <strong>154 млрд рублей (+12 %)</strong>, а наиболее быстро растущим сегментом стала подготовка к экзаменам (+50 %).</p>
+    </div>
+    <div>
+      <div class="chart-wrap" style="height: 260px;">
+        <canvas id="chartMarket"></canvas>
+      </div>
+      <div class="grid grid-2" style="margin-top: 10px;">
+        <div class="card tinted">
+          <div class="title">AI-наставничество</div>
+          <div class="big primary">3,55 → 6,45</div>
+          <div class="sub">млрд долларов: рост сегмента AI-репетиторов 2025 → 2030</div>
+        </div>
+        <div class="card">
+          <div class="title">Аудитория</div>
+          <div class="big">≈ 85 млн</div>
+          <div class="sub">обучающихся уже пользуются AI-репетиторами</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── 3. АКТУАЛЬНОСТЬ — СОДЕРЖАНИЕ ── -->
+<section class="slide" data-title="Актуальность · содержание">
+  <div class="eyebrow"><span class="dot"></span>Актуальность работы · содержательная составляющая</div>
+  <h1>Прямое применение языковых моделей в роли тьютора <span class="accent">сопряжено с тремя ограничениями</span></h1>
+
+  <div class="grid grid-3" style="margin-top: 12px;">
+    <div class="card red">
+      <div class="title">Достоверность</div>
+      <h3 style="font-size: 16px; margin-top: 4px;">Галлюцинации</h3>
+      <p class="small" style="margin-top: 6px;">Языковые модели общего назначения порождают фактологически некорректные утверждения, сформулированные убедительно и без указания источника. В математической дисциплине, где единственная ошибка обесценивает ответ целиком, такой режим работы принципиально неприемлем.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">Персонализация</div>
+      <h3 style="font-size: 16px; margin-top: 4px;">Одна траектория для всех</h3>
+      <p class="small" style="margin-top: 6px;">Преподавание математики в массовых форматах организовано вокруг усреднённого студента: одна часть аудитории не успевает за изложением, другая теряет вовлечённость из-за избыточной для неё детализации.</p>
+    </div>
+    <div class="card tinted">
+      <div class="title">Развивающий стиль</div>
+      <h3 style="font-size: 16px; margin-top: 4px;">Подмена мышления ответом</h3>
+      <p class="small" style="margin-top: 6px;">Готовое решение формирует у обучающегося иллюзию понимания и подавляет навык самостоятельного рассуждения — навык, образующий ядро профессиональной компетенции специалиста по данным.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p style="font-size: 16px;">Сохраняется устойчивая педагогическая потребность: спрос на специалистов Data Science на рынке труда устойчиво превышает предложение, тогда как именно <strong>математический фундамент</strong> остаётся главным барьером для входа в профессию. Платформа, целенаправленно снижающая этот барьер за счёт методически корректного индивидуального сопровождения, отвечает одновременно интересам обучающихся и долгосрочным потребностям рынка труда.</p>
+</section>
+
+<!-- ─────────────────────────────────────── 4. ПРОБЛЕМА И ЦЕЛЬ ── -->
+<section class="slide" data-title="Проблема и цель">
+  <div class="eyebrow"><span class="dot"></span>Постановка проблемы · цель работы</div>
+  <h1>Незакрытая потребность: <span class="accent">три свойства одновременно</span></h1>
+
+  <div class="split text-heavy">
+    <div>
+      <h2 style="margin-bottom: 8px;">Проблема исследования</h2>
+      <p>На рынке отсутствует доступный по цене инструмент, который одновременно обеспечивал бы:</p>
+      <ol class="numbered" style="margin-top: 8px;">
+        <li><strong>достоверность академического учебника</strong> — каждое утверждение опирается на верифицируемый источник;</li>
+        <li><strong>индивидуальную образовательную траекторию</strong>, выстраиваемую с учётом пробелов конкретного студента;</li>
+        <li><strong>развивающий стиль наставничества</strong>, не подменяющий самостоятельную мыслительную работу обучающегося готовым решением.</li>
+      </ol>
+      <p style="margin-top: 14px;">Существующие решения, как правило, реализуют не более одного из перечисленных свойств, что и обосновывает разработку MindFlow.</p>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 8px;">Цель работы</h2>
+      <p>Разработать и довести до состояния работающего прототипа адаптивную образовательную платформу, обеспечивающую персонализированное, методически корректное и опирающееся на верифицируемые источники обучение математике и основам Data Science.</p>
+
+      <div class="card tinted" style="margin-top: 14px;">
+        <div class="title">Объект исследования</div>
+        <p class="small" style="margin-top: 4px;">Процесс персонализированного обучения математике и основам Data Science с применением технологий искусственного интеллекта.</p>
+      </div>
+      <div class="card" style="margin-top: 10px;">
+        <div class="title">Предмет исследования</div>
+        <p class="small" style="margin-top: 4px;">Методы и программные средства адаптивного AI-наставничества: многоролевая модель диалога, технология RAG и модель знаний обучающегося (граф концептов + BKT).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────── 5. ВОСЕМЬ ЗАДАЧ ── -->
+<section class="slide" data-title="Задачи работы">
+  <div class="eyebrow"><span class="dot"></span>Задачи исследования и реализации</div>
+  <h1>Восемь задач выстроены по продуктовой логике <span class="accent">«от проблемы к решению»</span></h1>
+
+  <div class="grid grid-4" style="margin-top: 10px;">
+    <div class="card amber"><div class="title">Этап 1 · исследование</div><p class="small" style="margin-top: 4px;">подтверждение проблемы и анализ предметной области (задача 1 — глава 2)</p></div>
+    <div class="card tinted"><div class="title">Этап 2 · проектирование</div><p class="small" style="margin-top: 4px;">формирование концепции и требований (задача 2 — глава 3)</p></div>
+    <div class="card green"><div class="title">Этап 3 · реализация</div><p class="small" style="margin-top: 4px;">разработка MVP и развёртывание (задачи 3–7 — глава 4)</p></div>
+    <div class="card red"><div class="title">Этап 4 · оценка</div><p class="small" style="margin-top: 4px;">эмпирическая проверка ключевых компонентов (задача 8 — глава 5)</p></div>
+  </div>
+
+  <div class="split" style="margin-top: 14px;">
+    <div>
+      <ol class="numbered">
+        <li>Провести анализ предметной области, рынка EdTech и целевой аудитории; сформулировать продуктовые гипотезы.</li>
+        <li>Спроектировать архитектуру платформы, объединяющую контур обучения, контур AI-поддержки и контур аналитики прогресса.</li>
+        <li>Разработать библиотеку учебного контента с интерактивной подачей теории и набором практических заданий.</li>
+        <li>Реализовать диалогового AI-наставника, функционирующего в нескольких педагогических ролях под управлением роли-оркестратора.</li>
+      </ol>
+    </div>
+    <div>
+      <ol class="numbered" start="5" style="counter-reset: step 4;">
+        <li>Построить подсистему поиска с дополнением генерации (RAG) с гибридным ранжированием и обязательным цитированием источников.</li>
+        <li>Построить модель знаний обучающегося — граф концептов и байесовское отслеживание уровня их освоения (BKT).</li>
+        <li>Определить и реализовать бизнес-модель, подключить аналитику и обеспечить развёртывание в облачной инфраструктуре.</li>
+        <li>Проверить работоспособность ключевых компонентов автоматическими тестами и оценить практическую применимость.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────── 6. ЦЕЛЕВАЯ АУДИТОРИЯ ── -->
+<section class="slide" data-title="Целевая аудитория">
+  <div class="eyebrow"><span class="dot"></span>Анализ целевой аудитории</div>
+  <h1>Три сегмента, <span class="accent">четыре общие потребности</span></h1>
+
+  <p style="margin-bottom: 12px;">Целевую аудиторию платформы составляют русскоязычные обучающиеся, осваивающие математический фундамент Data Science. Внутри этой совокупности прослеживаются три отчётливо различимых сегмента.</p>
+
+  <table class="t" style="margin-bottom: 14px;">
+    <thead>
+      <tr><th>Сегмент</th><th>Краткая характеристика</th><th>Ключевая потребность</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Студенты технических и экономических вузов</strong></td>
+        <td>Изучают линейную алгебру и математический анализ, готовятся к экзаменам, планируют карьеру в анализе данных</td>
+        <td>Понять предмет, а не механически заучить; восполнить пробелы в индивидуальном темпе</td>
+      </tr>
+      <tr>
+        <td><strong>Специалисты, переходящие в Data Science</strong></td>
+        <td>Работающие взрослые с базовым техническим образованием, осваивающие машинное обучение и математику для смены профессии</td>
+        <td>Гибкий график занятий, прикладные примеры, методическая поддержка без живого репетитора</td>
+      </tr>
+      <tr>
+        <td><strong>Самостоятельные учащиеся</strong></td>
+        <td>Изучают ML и алгоритмы по открытым онлайн-материалам, испытывают трудности при возврате к математическому фундаменту</td>
+        <td>Достоверный наставник, не выдающий готовых ответов, с обязательной привязкой к источникам</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>При различиях в исходных мотивах все три сегмента демонстрируют четыре общие потребности: <strong>(1)</strong> индивидуальная траектория, выстроенная с учётом конкретных пробелов; <strong>(2)</strong> развивающий, а не «решающий за ученика» характер наставничества; <strong>(3)</strong> фактологическая достоверность объяснений; <strong>(4)</strong> ценовая доступность инструмента.</p>
+</section>
+
+<!-- ─────────────────────────────────────────────── 7. КОНКУРЕНТЫ ── -->
+<section class="slide" data-title="Конкурентный анализ">
+  <div class="eyebrow"><span class="dot"></span>Конкурентный анализ · сопоставление с альтернативными решениями</div>
+  <h1>Существующие решения покрывают <span class="accent">лишь часть потребностей</span></h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">Конкурентное окружение целесообразно структурировать по типу решения. Каждый из четырёх типов закрывает не более одной–двух из четырёх ключевых потребностей.</p>
+      <table class="t" style="margin-top: 12px;">
+        <thead>
+          <tr><th>Решение</th><th>Тип</th><th>Ограничение относительно MindFlow</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Photomath, Wolfram\|Alpha</td><td>Решатели</td><td>Выдают ответ «под ключ»; отсутствуют адаптация и диалог</td></tr>
+          <tr><td>Khanmigo</td><td>AI-наставник</td><td>Англоязычный; школьная программа</td></tr>
+          <tr><td>ALEKS, Squirrel AI</td><td>Адаптивные ITS</td><td>Закрытый контент; отсутствует свободный диалог</td></tr>
+          <tr><td>ChatGPT, иные LLM</td><td>Универсальные</td><td>Склонность к галлюцинациям; нет цитирования; нет модели знаний</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="chart-wrap" style="height: 240px;">
+        <canvas id="chartCompetitors"></canvas>
+      </div>
+      <p class="caption">По сравнению с международными AI-сервисами подписка MindFlow Pro оказывается <strong>в 6–14 раз дешевле</strong> при сопоставимой или превосходящей функциональности.</p>
+      <div class="card tinted" style="margin-top: 10px;">
+        <div class="title">Незанятая ниша</div>
+        <p class="small" style="margin-top: 4px;">Ни одно из распространённых решений не объединяет одновременно: развивающий многоролевой диалог, достоверность через цитирование (RAG), индивидуальную адаптацию на основе графа знаний и BKT, и ориентацию на русскоязычную вузовскую математику для Data Science.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── 8. ПРОДУКТОВЫЕ ГИПОТЕЗЫ ── -->
+<section class="slide" data-title="Продуктовые гипотезы">
+  <div class="eyebrow"><span class="dot"></span>Формулировка продуктовых гипотез</div>
+  <h1>Четыре гипотезы в <span class="accent">операционализированной форме</span></h1>
+
+  <p style="margin-bottom: 14px;">На основании анализа предметной области, целевой аудитории и конкурентного окружения сформулированы четыре продуктовые гипотезы, каждая операционализирована в виде измеримого утверждения и подлежит эмпирической проверке на работающем прототипе.</p>
+
+  <div class="grid grid-2">
+    <div class="card tinted">
+      <div class="title">H1 · педагогическая (основная)</div>
+      <p class="small" style="margin-top: 6px; line-height: 1.55;">Если AI-наставник вместо готового решения задаёт наводящие вопросы и предлагает практические кейсы (роли MIRROR, SANDBOX, CHALLENGER), то обучающиеся демонстрируют более глубокое освоение материала, чем при использовании пошаговых решателей.</p>
+    </div>
+    <div class="card green">
+      <div class="title">H2 · о достоверности</div>
+      <p class="small" style="margin-top: 6px; line-height: 1.55;">Обязательное цитирование источников и опора ответов на проверенный корпус (RAG) повышают доверие пользователей и снижают долю фактологически ошибочных ответов до уровня, приемлемого для учебного применения.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">H3 · о персонализации</div>
+      <p class="small" style="margin-top: 6px; line-height: 1.55;">Адаптация подачи материала на основе графа знаний и байесовских оценок освоения концептов увеличивает вовлечённость и удержание пользователей в сравнении с единой для всех последовательностью контента.</p>
+    </div>
+    <div class="card">
+      <div class="title">H4 · о ценности</div>
+      <p class="small" style="margin-top: 6px; line-height: 1.55;">Целевая аудитория готова оплачивать развивающего AI-наставника по цене 349 ₽ в месяц при наличии 30-дневного пробного периода, позволяющего пользователю самостоятельно убедиться в практической пользе сервиса.</p>
+    </div>
+  </div>
+
+  <p class="caption" style="margin-top: 14px;">Гипотезы H1, H2 и H3 эмпирически подтверждены на работающем прототипе (главы 4–5 диплома). Проверка H4 запланирована на этап запуска оплачиваемой подписки.</p>
+</section>
+
+<!-- ─────────────────────────────────── 9. КОНЦЕПЦИЯ И АРХИТЕКТУРА ── -->
+<section class="slide" data-title="Концепция и стек">
+  <div class="eyebrow"><span class="dot"></span>Концепция продукта и технологический стек</div>
+  <h1>Три проектных принципа · <span class="accent">монорепозиторий из трёх слоёв</span></h1>
+
+  <div class="split">
+    <div>
+      <h2 style="margin-bottom: 6px;">Проектные принципы</h2>
+      <div class="card tinted" style="margin-bottom: 8px;">
+        <div class="title">Развитие вместо подсказки</div>
+        <p class="small" style="margin-top: 4px;">Наставник принципиально не выдаёт готового решения по первому запросу; вместо этого он ведёт обучающегося к решению через наводящие вопросы, прикладные кейсы и контраргументы.</p>
+      </div>
+      <div class="card green" style="margin-bottom: 8px;">
+        <div class="title">Достоверность через цитирование</div>
+        <p class="small" style="margin-top: 4px;">Каждая содержательная реплика наставника, при наличии релевантной теории в корпусе, опирается на проверенный набор источников и сопровождается явными ссылками на них.</p>
+      </div>
+      <div class="card amber">
+        <div class="title">Адаптация под студента</div>
+        <p class="small" style="margin-top: 4px;">Содержание, темп и стиль диалога подстраиваются под конкретного обучающегося на основании формализованной модели его знаний — графа концептов с пререквизитными связями и байесовского отслеживания освоения.</p>
+      </div>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 6px;">Технологический стек</h2>
+      <table class="t" style="font-size: 12px;">
+        <thead><tr><th>Слой</th><th>Технология</th></tr></thead>
+        <tbody>
+          <tr><td>Клиент</td><td>React 19 + Vite + TypeScript + Tailwind + KaTeX</td></tr>
+          <tr><td>Сервер</td><td>Node.js 22 + Express + TypeScript (tsx)</td></tr>
+          <tr><td>Хранилище</td><td>Supabase (PostgreSQL + pgvector + HNSW)</td></tr>
+          <tr><td>LLM</td><td>DeepSeek-V4-Flash → Cloudflare Workers AI → OpenRouter</td></tr>
+          <tr><td>Эмбеддинги</td><td>Qwen3-Embedding-0.6B (1024d), локально через @huggingface/transformers</td></tr>
+          <tr><td>BKT</td><td>Python + numpy + scikit-learn (services/adaptive-ml)</td></tr>
+          <tr><td>Аналитика</td><td>Plausible + Google Analytics 4 (dual-emit)</td></tr>
+          <tr><td>CI/CD</td><td>GitHub Actions, Railpack/Nixpacks</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin-top: 8px;">Каждый выбор обоснован измеримыми критериями (см. бенчмарки в главе 4) либо архитектурными требованиями продукта (единый язык на всех слоях, консолидация реляционного и векторного хранилища).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────── 10. КОНВЕЙЕР ОТВЕТА ── -->
+<section class="slide" data-title="Конвейер ответа">
+  <div class="eyebrow"><span class="dot"></span>Центральный обработчик · /api/llm/respond</div>
+  <h1>Шестиэтапный конвейер ответа <span class="accent">с обязательным цитированием</span></h1>
+
+  <div class="split">
+    <div class="pipeline">
+      <div class="step"><div class="n">1</div><div class="body"><div class="name">Быстрый детерминированный маршрутизатор</div><div class="desc">При распознавании запроса по регулярным выражениям педагогическая роль определяется немедленно</div></div></div>
+      <div class="step"><div class="n">2</div><div class="body"><div class="name">LLM-оркестратор (если не распознано)</div><div class="desc">Классифицирует запрос и выбирает роль на основании темы, истории диалога и профиля знаний</div></div></div>
+      <div class="step"><div class="n">3</div><div class="body"><div class="name">RAG-извлечение релевантных фрагментов</div><div class="desc">Эмбеддинг запроса (Qwen3, 1024d) → гибридный поиск (RRF: плотный + BM25, top-40) → ограничение на источник (≤ 2 фрагмента) → MMR-отбор разнообразных фрагментов (λ ≈ 0,6)</div></div></div>
+      <div class="step"><div class="n">4</div><div class="body"><div class="name">Формирование промпта и вызов LLM</div><div class="desc">Системный промпт выбранной педагогической роли + профиль студента + извлечённые фрагменты → DeepSeek-V4-Flash</div></div></div>
+      <div class="step"><div class="n">5</div><div class="body"><div class="name">Возврат ответа с цитатами</div><div class="desc">Ответ сопровождается списком использованных источников и маркерами [N] в тексте</div></div></div>
+      <div class="step"><div class="n">6</div><div class="body"><div class="name">Асинхронные побочные эффекты</div><div class="desc">Запись метрик извлечения; пополнение персонального графа концептов; при наличии вердикта о корректности — пересчёт BKT-оценок освоения</div></div></div>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 8px;">Архитектурный принцип</h2>
+      <p>Ни один ответ наставника не формируется исключительно из параметров языковой модели: каждому ответу предшествует этап извлечения фрагментов корпуса, и результат сопровождается явными цитатами. Это составляет техническую основу для противодействия «галлюцинациям».</p>
+      <div class="note" style="margin-top: 14px;">
+        <strong>Декомпозиция конвейера на 6 явных этапов</strong> позволяет независимо измерять качество каждого узла (точность извлечения, корректность выбора роли, фактологическая обоснованность ответа) и обеспечивает методическую прозрачность оценки.
+      </div>
+      <div class="flex-row" style="margin-top: 14px;">
+        <span class="badge">tests/api</span>
+        <span class="badge">tests/llm</span>
+        <span class="badge">tests/ingest</span>
+        <span class="badge muted">≈ 30 автотестов</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────── 11. МНОГОРОЛЕВОЙ ── -->
+<section class="slide" data-title="Многоролевой наставник">
+  <div class="eyebrow"><span class="dot"></span>Многоролевая архитектура наставника</div>
+  <h1>Четыре педагогические роли под управлением <span class="accent">служебной роли-оркестратора</span></h1>
+
+  <p style="margin-bottom: 12px;">Центральным элементом концепции является многоролевой наставник: четыре содержательные педагогические роли, выбор между которыми перед каждым ответом производит отдельная служебная роль. Назначение и стиль каждой роли формализованы и закреплены в системных промптах в каталоге <code>prompts/</code>.</p>
+
+  <div class="grid grid-2" style="margin-bottom: 12px;">
+    <div class="card tinted">
+      <div class="title">LECTURER</div>
+      <h3 style="margin-top: 4px;">Объяснение материала</h3>
+      <p class="small" style="margin-top: 4px;">Структурированное объяснение с примерами, формулами KaTeX и обязательными цитатами. По данным пилотной эксплуатации составляет 60 % всех обращений к наставнику.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">MIRROR</div>
+      <h3 style="margin-top: 4px;">Сократический диалог</h3>
+      <p class="small" style="margin-top: 4px;">До 80 % реплики составляют наводящие вопросы, а не ответы. Активируется при сигналах когнитивной растерянности студента («не понимаю», «путаюсь»).</p>
+    </div>
+    <div class="card green">
+      <div class="title">SANDBOX</div>
+      <h3 style="margin-top: 4px;">Практический кейс из Data Science</h3>
+      <p class="small" style="margin-top: 4px;">Сценарий с «грязными» данными и микро-задачей. Активируется при переходе студента от теории к практике.</p>
+    </div>
+    <div class="card red">
+      <div class="title">CHALLENGER</div>
+      <h3 style="margin-top: 4px;">Проверка на прочность</h3>
+      <p class="small" style="margin-top: 4px;">Контрпример и требование защитить выбранное утверждение. Активируется при попытках студента закрепить решение без доказательства.</p>
+    </div>
+  </div>
+
+  <div class="card tinted">
+    <div class="title">ORCHESTRATOR · служебная роль-маршрутизатор</div>
+    <p class="small" style="margin-top: 4px;">Анализирует тему, ввод студента, историю предшествующего диалога и профиль знаний; выбирает педагогическую роль; при недоступности LLM управление передаётся детерминированному запасному маршрутизатору. Журналы продуктивной эксплуатации подтверждают, что оркестратор <strong>действительно переключает роли</strong> в зависимости от контекста (см. слайд 18).</p>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────── 12. ВЫБОР ЭМБЕДДИНГОВ ── -->
+<section class="slide" data-title="Выбор эмбеддингов">
+  <div class="eyebrow"><span class="dot"></span>Бенчмарк моделей эмбеддингов · 9 моделей · golden set 50 пар</div>
+  <h1>Решение принято на основании <span class="accent">количественных измерений</span>, а не отраслевых рейтингов</h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">На материале корпуса проекта (<strong>2 321 фрагмент</strong>) сформирован эталонный набор из <strong>50 пар «вопрос — релевантный фрагмент»</strong>; вопросы сгенерированы языковой моделью DeepSeek на основе случайно выбранных чанков, стратифицированных по источнику. Проведено сравнение <strong>9 свободно распространяемых многоязычных моделей</strong> по метрике NDCG@10.</p>
+      <div class="chart-wrap" style="height: 300px; margin-top: 10px;">
+        <canvas id="chartEmbeddings"></canvas>
+      </div>
+    </div>
+    <div>
+      <div class="kpi-row" style="grid-template-columns: 1fr 1fr;">
+        <div class="kpi"><div class="v">+107 %</div><div class="l">NDCG@10 vs e5-small</div></div>
+        <div class="kpi"><div class="v">+95 %</div><div class="l">Recall@5</div></div>
+        <div class="kpi"><div class="v">+120 %</div><div class="l">MRR@10</div></div>
+        <div class="kpi"><div class="v">82 / 100</div><div class="l">в top-5 (vs 42 у baseline)</div></div>
+      </div>
+      <div class="divider"></div>
+      <table class="t" style="font-size: 12px;">
+        <thead><tr><th>Модель</th><th class="num">Recall@5</th><th class="num">NDCG@10</th></tr></thead>
+        <tbody>
+          <tr class="highlight"><td>Qwen3-Embedding-0.6B</td><td class="num">0,82</td><td class="num">0,754</td></tr>
+          <tr><td>bge-m3</td><td class="num">0,68</td><td class="num">0,614</td></tr>
+          <tr><td>e5-large-instruct</td><td class="num">0,50</td><td class="num">0,378</td></tr>
+          <tr><td>multilingual-e5-small (baseline)</td><td class="num">0,42</td><td class="num">0,364</td></tr>
+          <tr><td>e5-base</td><td class="num">0,44</td><td class="num">0,358</td></tr>
+          <tr><td>e5-large</td><td class="num">0,40</td><td class="num">0,335</td></tr>
+          <tr><td>LaBSE-en-ru</td><td class="num">0,20</td><td class="num">0,150</td></tr>
+          <tr><td>nomic-embed-v1.5 (англ.)</td><td class="num">0,04</td><td class="num">0,038</td></tr>
+          <tr><td>mxbai-embed-large (англ.)</td><td class="num">0,04</td><td class="num">0,029</td></tr>
+        </tbody>
+      </table>
+      <p class="caption">Англоязычные модели, занимающие высокие позиции в общем рейтинге MTEB, на русскоязычном математическом корпусе работают <strong>на уровне случайного ранжирования</strong>: их токенизаторы не охватывают кириллицу как «известные» токены.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────── 13. ЭКСПЕРИМЕНТ С РЕРАНКЕРОМ ── -->
+<section class="slide" data-title="Эксперимент с реранкером">
+  <div class="eyebrow"><span class="dot"></span>Проверка и отклонение реранкера · отрицательный результат как методическое решение</div>
+  <h1>Реранкер <span class="accent">отключён в продуктивной конфигурации</span> по итогам A/B-теста</h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">Каноническая архитектура RAG предполагает двухэтапное извлечение: быстрый bi-encoder ищет top-K кандидатов, более мощный cross-encoder реранкер переупорядочивает их. После перехода на Qwen3-Embedding-0.6B проверена гипотеза о пользе такого этапа в условиях проекта. На <strong>трёх открытых многоязычных реранкерах</strong> проведён A/B-тест.</p>
+
+      <table class="t" style="margin-top: 10px; font-size: 12px;">
+        <thead><tr><th>Конфигурация</th><th class="num">R@5</th><th class="num">NDCG@10</th><th class="num">Латентность, мс</th></tr></thead>
+        <tbody>
+          <tr class="highlight"><td>Qwen3-dense (baseline)</td><td class="num">0,82</td><td class="num">0,754</td><td class="num">39</td></tr>
+          <tr><td>+ Qwen3-Reranker-0.6B</td><td class="num">0,82</td><td class="num">0,754</td><td class="num">4 500</td></tr>
+          <tr><td>+ BAAI/bge-reranker-v2-m3</td><td class="num">0,74</td><td class="num">0,716</td><td class="num">9 300</td></tr>
+          <tr><td>+ jina-reranker-v2-multilingual</td><td class="num">0,82</td><td class="num">0,709</td><td class="num">68 000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 8px;">Три причины отрицательного результата</h2>
+      <ol class="numbered" style="font-size: 13px;">
+        <li><strong>Rank correlation problem.</strong> Qwen3-Reranker обучен теми же разработчиками и на близких данных, что и Qwen3-Embedding; сигналы коррелированы, реранкер «соглашается» с эмбеддером.</li>
+        <li><strong>Слабость cross-encoder вне домена.</strong> bge и jina обучены на общих ms-marco-данных без знания русской математики; переоценивают поверхностные совпадения.</li>
+        <li><strong>Потолок Recall@10 = 0,86.</strong> При оставшихся 14 % ошибок целевой фрагмент просто не входит в top-20; пересортировка top-20 не возвращает то, чего там нет.</li>
+      </ol>
+
+      <div class="note" style="margin-top: 12px;">
+        <strong>Принятое архитектурное решение:</strong> реранкер исключён из боевого конвейера. Pipeline сохраняется в виде dense (Qwen3) + sparse (BM25) + RRF, без дополнительного второго этапа. Латентность снижена с 5,4 с до значений, сопоставимых с инженерной целью.
+      </div>
+      <p class="caption" style="margin-top: 10px;">Методический принцип работы: компонент включается в продукт только при наличии измеримого выигрыша; отсутствие выигрыша автоматически означает отказ.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────────────── 14. ВЫБОР LLM ── -->
+<section class="slide" data-title="Выбор LLM">
+  <div class="eyebrow"><span class="dot"></span>Сравнение языковых моделей · 5 моделей нового поколения в едином конвейере</div>
+  <h1>DeepSeek-V4-Flash — <span class="accent">наивысший ролевзвешенный показатель</span> при приемлемой задержке</h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">Эталонный набор из <strong>20 вопросов</strong> по четырём педагогическим ролям прогонялся через производственный конвейер с подменой языковой модели. Сравнивались две версии DeepSeek-V4 (удалённый API) и три локальные модели через LM Studio на Apple M5 / 32 GB unified memory. Конвейер RAG не менялся, что изолирует вклад именно языковой модели.</p>
+      <div class="chart-wrap" style="height: 280px; margin-top: 10px;">
+        <canvas id="chartLlm"></canvas>
+      </div>
+    </div>
+    <div>
+      <table class="t" style="font-size: 12px;">
+        <thead>
+          <tr><th>Модель</th><th class="num">Pass</th><th class="num">RWS</th><th class="num">Faith.</th><th class="num">p50, с</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight"><td>DeepSeek-V4-Flash</td><td class="num">85 %</td><td class="num">0,825</td><td class="num">0,471</td><td class="num">23,5</td></tr>
+          <tr><td>Gemma-4-E4B (7,5 B)</td><td class="num">85 %</td><td class="num">0,746</td><td class="num">0,445</td><td class="num">55,6</td></tr>
+          <tr><td>DeepSeek-V4-Pro</td><td class="num">80 %</td><td class="num">0,647</td><td class="num">0,482</td><td class="num">48,8</td></tr>
+          <tr><td>Nemotron-3-Nano-4B</td><td class="num">50 %</td><td class="num">0,548</td><td class="num">0,388</td><td class="num">99,8</td></tr>
+          <tr><td>Qwen3.6-27B</td><td class="num">35 %</td><td class="num">0,474</td><td class="num">0,369</td><td class="num">318,9</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin-top: 8px;"><strong>RWS</strong> — ролевзвешенный показатель качества ответа. <strong>Faith.</strong> — фактическая обоснованность по схеме LLM-as-judge.</p>
+      <div class="card green" style="margin-top: 10px;">
+        <div class="title">Решающие соображения</div>
+        <p class="small" style="margin-top: 4px;">DeepSeek-V4-Flash выбрана как основная модель. Gemma-4-E4B уступает на 10 % по качеству при двукратной задержке, но <strong>полностью помещается в unified memory ноутбука</strong> и зафиксирована как резерв для локального развёртывания.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── 15. ГРАФ ЗНАНИЙ + BKT ── -->
+<section class="slide" data-title="Граф знаний + BKT">
+  <div class="eyebrow"><span class="dot"></span>Модель знаний обучающегося</div>
+  <h1>Граф концептов + <span class="accent">байесовское отслеживание</span> освоения</h1>
+
+  <div class="split">
+    <div>
+      <p class="small">Адаптация обучения строится на формализованной модели знаний. В проекте реализован граф знаний концептов с пререквизитными связями, поверх которого применяется классическая скрыто-марковская модель Bayesian Knowledge Tracing (Corbett & Anderson, 1995).</p>
+
+      <div class="grid grid-2" style="margin-top: 10px;">
+        <div class="card tinted">
+          <div class="title">Концептов в графе</div>
+          <div class="big primary">44</div>
+          <div class="sub">математика 24 · ML 10 · алгоритмы 10</div>
+        </div>
+        <div class="card">
+          <div class="title">Пререквизитных связей</div>
+          <div class="big">34</div>
+          <div class="sub">отношения «А — необходимое условие для Б»</div>
+        </div>
+      </div>
+
+      <p class="small" style="margin-top: 14px;">Пороги принятия решений настроены эмпирически: концепт считается <strong>освоенным при p_mastery ≥ 0,7</strong> и относится к <strong>слабым местам при p_mastery &lt; 0,4</strong> (при наличии не менее двух попыток).</p>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 6px;">Сравнение BKT и DKT на синтетических данных</h2>
+      <p class="small">Проведён бенчмарк классического BKT (EM-калибровка, скрыто-марковская модель) и нейросетевой Deep Knowledge Tracing (Piech-style LSTM) на синтетическом наборе из 500 студентов × 24 концепта × ≈ 30 попыток.</p>
+
+      <div class="chart-wrap" style="height: 230px; margin-top: 10px;">
+        <canvas id="chartBkt"></canvas>
+      </div>
+
+      <div class="note" style="margin-top: 10px;">
+        <strong>Результат:</strong> классический BKT (AUC 0,769; точность 84 %) <strong>не уступил</strong> нейросетевой DKT (AUC 0,724) при <strong>разнице в 350× по числу параметров</strong> (96 vs 33 656). Выбор сделан в пользу более простой и интерпретируемой модели.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────── 16. CAT/IRT ДИАГНОСТИКА ── -->
+<section class="slide" data-title="CAT/IRT">
+  <div class="eyebrow"><span class="dot"></span>Адаптивная входная диагностика</div>
+  <h1>Computer Adaptive Testing на основе модели <span class="accent">IRT 3PL</span></h1>
+
+  <div class="split">
+    <div>
+      <p class="small">Реализована входная диагностика по схеме компьютерного адаптивного тестирования поверх трёхпараметрической модели Item Response Theory (3PL). Каждый следующий вопрос подбирается из пула так, чтобы максимизировать информацию Фишера при текущей точечной оценке способности студента θ; оценка обновляется методом Expected A Posteriori на квадратурной сетке.</p>
+
+      <ul class="bullets" style="margin-top: 10px;">
+        <li>Стандартно-нормальный приор; <strong>13 квадратурных узлов</strong> равномерно на [−3; +3]</li>
+        <li>Тест ограничен <strong>8 вопросами</strong> — компромисс между информативностью оценки и продолжительностью сессии</li>
+        <li>Итоговый уровень владения <strong>Junior L1 / Middle L2 / Senior L3</strong> определяется по итоговому θ; пороги — в серединах интервалов между уровнями сложности заданий пула (b_basic = −1, b_intermediate = 0, b_advanced = +1)</li>
+        <li>Реализован для трёх курсов: математика для DS, машинное обучение, алгоритмы и структуры данных</li>
+      </ul>
+    </div>
+    <div>
+      <div class="chart-wrap" style="height: 320px;">
+        <canvas id="chartIrt"></canvas>
+      </div>
+      <p class="caption" style="margin-top: 8px;">Характеристические кривые трёх классов сложности. Адаптивное тестирование выбирает задание, для которого вероятность верного ответа при текущей θ близка к 0,5 — именно такое задание даёт <strong>максимум информации Фишера</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────────── 17. РЕЗУЛЬТАТЫ — ПОИСК ── -->
+<section class="slide" data-title="Результаты — поиск">
+  <div class="eyebrow"><span class="dot"></span>Главные результаты · качество семантического поиска</div>
+  <h1>Систематическая диагностика <span class="accent">повысила качество ранжирования</span></h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">Качество поиска оценивалось тремя стандартными метриками информационного поиска: точностью (Precision@k), полнотой (Recall@k) и средним обратным рангом (MRR). Оптимизация поискового контура носила пошаговый характер: ограничение фрагментов на источник, перевод BM25 на дизъюнкцию лексем, эмпирическая настройка весов RRF.</p>
+
+      <div class="chart-wrap" style="height: 270px; margin-top: 10px;">
+        <canvas id="chartRetrieval"></canvas>
+      </div>
+    </div>
+    <div>
+      <table class="t" style="font-size: 13px;">
+        <thead><tr><th>Показатель</th><th class="num">Было</th><th class="num">Стало</th><th class="num">Δ</th></tr></thead>
+        <tbody>
+          <tr><td>Precision@5</td><td class="num">0,362</td><td class="num">0,403</td><td class="num">+11 %</td></tr>
+          <tr><td>Recall@5</td><td class="num">0,258</td><td class="num">0,448</td><td class="num"><strong>+74 %</strong></td></tr>
+          <tr><td>Recall@10</td><td class="num">0,258</td><td class="num">0,448</td><td class="num">+74 %</td></tr>
+          <tr class="highlight"><td>MRR</td><td class="num">0,475</td><td class="num">0,683</td><td class="num"><strong>+44 %</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p class="caption">В содержательной интерпретации первый правильный фрагмент в среднем переместился со <strong>второй позиции выдачи на первую</strong>, а количество найденных релевантных материалов <strong>увеличилось почти вдвое</strong>.</p>
+
+      <div class="note" style="margin-top: 10px;">
+        <strong>Методический вывод:</strong> прирост достигнут не увеличением вычислительной мощности, а устранением конкретных дефектов конвейера, выявленных диагностикой метрик предыдущего шага. <em>Систематическая диагностика эффективнее слепой оптимизации.</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── 18. РЕЗУЛЬТАТЫ — ОТВЕТЫ ── -->
+<section class="slide" data-title="Результаты — ответы">
+  <div class="eyebrow"><span class="dot"></span>Главные результаты · качество ответов наставника</div>
+  <h1>85 % прохождение, 0 % противоречий <span class="accent">учебному материалу</span></h1>
+
+  <p class="small" style="margin-bottom: 12px;">Каждый ответ наставника оценивался по единой системе формализованных признаков: полнота раскрытия ожидаемых понятий, соответствие предписанной педагогической роли, наличие ссылки на источник, отсутствие признаков необоснованной генерации. Поскольку роли по назначению различны, единый показатель покрытия концептов введён в форме <em>ролевзвешенного показателя</em> (`role_weighted_score`).</p>
+
+  <div class="grid grid-4">
+    <div class="card tinted">
+      <div class="title">Pass rate</div>
+      <div class="big primary">85 %</div>
+      <div class="sub">17 из 20 вопросов</div>
+    </div>
+    <div class="card">
+      <div class="title">Ролевзвешенный</div>
+      <div class="big">0,825</div>
+      <div class="sub">σ ≈ 0,05 при n = 20</div>
+    </div>
+    <div class="card amber">
+      <div class="title">Покрытие концептов</div>
+      <div class="big amber">0,741</div>
+      <div class="sub">без взвешивания</div>
+    </div>
+    <div class="card green">
+      <div class="title">Цитата в ответе</div>
+      <div class="big green">83 %</div>
+      <div class="sub">ответов содержат [N]-маркеры</div>
+    </div>
+  </div>
+
+  <div class="split" style="margin-top: 14px;">
+    <div>
+      <h2 style="margin-bottom: 8px;">Разбивка по педагогическим ролям</h2>
+      <table class="t">
+        <thead><tr><th>Роль</th><th class="num">n</th><th class="num">Pass</th><th class="num">RWS</th><th class="num">Coverage</th></tr></thead>
+        <tbody>
+          <tr><td>LECTURER</td><td class="num">10</td><td class="num">90 %</td><td class="num">0,878</td><td class="num">0,878</td></tr>
+          <tr><td>CHALLENGER</td><td class="num">4</td><td class="num">75 %</td><td class="num">0,750</td><td class="num">0,750</td></tr>
+          <tr><td>SANDBOX</td><td class="num">4</td><td class="num">75 %</td><td class="num">0,770</td><td class="num">0,305</td></tr>
+          <tr><td>MIRROR</td><td class="num">2</td><td class="num">100 %</td><td class="num">0,810</td><td class="num">0,367</td></tr>
+        </tbody>
+      </table>
+      <p class="caption">Низкое покрытие концептов у SANDBOX и MIRROR соответствует их назначению: эти роли не реферируют концепты, а ставят задачу или задают вопросы. Именно поэтому в качестве основной метрики принят <strong>ролевзвешенный показатель</strong>, а не «сырое» покрытие.</p>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 8px;">Фактическая обоснованность (LLM-as-judge)</h2>
+      <p class="small">Отдельная языковая модель в роли судьи (`deepseek-v4-flash`) разбивает ответ на атомарные утверждения и классифицирует каждое как SUPPORTED / UNSUPPORTED / CONTRADICTED. Бюджет токенов судьи поднят с 2 000 до 8 000 для устранения сбоев разбора.</p>
+      <div class="grid grid-2" style="margin-top: 10px;">
+        <div class="card green">
+          <div class="title">Противоречий корпусу</div>
+          <div class="big green">0,0 %</div>
+          <div class="sub">архитектура цитирования работает</div>
+        </div>
+        <div class="card">
+          <div class="title">Подкреплённых утверждений</div>
+          <div class="big">53,9 %</div>
+          <div class="sub">faithfulness ≈ 0,471</div>
+        </div>
+      </div>
+      <p class="caption">Контрольная верификация альтернативной моделью-судьёй (Qwen2.5-7B) дала практически идентичный результат, что повышает доверие к полученной оценке.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────────── 19. A/B PKG ── -->
+<section class="slide" data-title="A/B персонализации">
+  <div class="eyebrow"><span class="dot"></span>Проверка идеи персонализации · «слепое» парное сравнение на 50 вопросах</div>
+  <h1>Передача профиля знаний в промпт даёт <span class="accent">82 % побед</span> над baseline</h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">Проверена гипотеза о целесообразности учёта индивидуального профиля обучающегося при формировании ответа. Профиль агрегируется функцией <code>buildStudentProfile</code> из пяти источников (история диалога, BKT-оценки, прогресс по темам, последние сообщения, цель обучения) и подставляется в системный промпт педагогической роли LECTURER в виде 5–7 строк сводки.</p>
+
+      <p class="small" style="margin-top: 8px;">Параллельно проверена гипотеза о пользе дополнения ответа концептуальными связями из образовательного графа (EduKG) — для текущей карты из 44 концептов получен <strong>отрицательный результат</strong>: ответы становились более объёмными и менее сфокусированными, и базовый вариант систематически выигрывал.</p>
+
+      <div class="card tinted" style="margin-top: 12px;">
+        <div class="title">Методика «слепого» парного сравнения</div>
+        <p class="small" style="margin-top: 4px;">Независимая модель-судья (DeepSeek-V4-Flash), не осведомлённая о принадлежности ответов к тому или иному варианту, выбирает предпочтительный ответ из пары; порядок вариантов рандомизирован.</p>
+      </div>
+    </div>
+    <div>
+      <div class="chart-wrap" style="height: 250px;">
+        <canvas id="chartPkg"></canvas>
+      </div>
+
+      <table class="t" style="margin-top: 10px;">
+        <thead><tr><th>Проверяемая идея</th><th>Результат</th><th>Решение</th></tr></thead>
+        <tbody>
+          <tr class="highlight"><td>Профиль студента в промпте</td><td>41 / 50 (82 %)</td><td>Включить</td></tr>
+          <tr><td>Концепты EduKG в ответе</td><td>Базовый лучше</td><td>Отключить</td></tr>
+        </tbody>
+      </table>
+
+      <p class="caption" style="margin-top: 10px;">Перевес 82 % при n = 50 выходит далеко за пределы стандартной ошибки сравнения (≈ 5 %), что не позволяет объяснить наблюдаемое преимущество случайностью. Соответствующий механизм интегрирован в продуктивный конвейер коммитом <code>2377a6f</code> от 24.05.2026.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────────────────────────────────── 20. ПИЛОТНАЯ ЭКСПЛУАТАЦИЯ ── -->
+<section class="slide" data-title="Пилотная эксплуатация">
+  <div class="eyebrow"><span class="dot"></span>Пилотная эксплуатация · 28 дней (28.04 – 25.05.2026)</div>
+  <h1>15 пользователей, 105 сеансов, <span class="accent">оркестратор переключает роли</span> в реальных данных</h1>
+
+  <div class="split">
+    <div>
+      <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="kpi"><div class="v">15</div><div class="l">активных пользователей</div></div>
+        <div class="kpi"><div class="v">105</div><div class="l">сеансов</div></div>
+        <div class="kpi"><div class="v">1 375</div><div class="l">просмотров</div></div>
+      </div>
+      <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr); margin-top: 8px;">
+        <div class="kpi"><div class="v">≈ 17 мин</div><div class="l">средний сеанс</div></div>
+        <div class="kpi"><div class="v">≈ 26 мин</div><div class="l">в разделе «Математика»</div></div>
+        <div class="kpi"><div class="v">81–88 %</div><div class="l">вовлечённых сеансов</div></div>
+      </div>
+
+      <table class="t" style="margin-top: 12px; font-size: 12px;">
+        <thead><tr><th>Подсистема</th><th class="num">Зафиксировано</th></tr></thead>
+        <tbody>
+          <tr><td>Регистрации (без оплат)</td><td class="num">5</td></tr>
+          <tr><td>Прогресс по темам</td><td class="num">60 записей / 18 тем</td></tr>
+          <tr><td>Диалоги с наставником</td><td class="num">25 сессий / 51 сообщение</td></tr>
+          <tr><td>Поисковых запросов RAG</td><td class="num">308</td></tr>
+          <tr><td>Оценок освоения концептов</td><td class="num">13 (6 слабых, 3 средних, 4 сильных)</td></tr>
+          <tr><td>Персональный граф знаний</td><td class="num">91 узел</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="chart-wrap" style="height: 280px;">
+        <canvas id="chartRoles"></canvas>
+      </div>
+      <div class="note" style="margin-top: 10px;">
+        <strong>Подтверждение работоспособности многоролевой архитектуры:</strong> распределение ролей по 308 запросам показывает, что оркестратор действительно адаптирует стиль ответа. Преобладает объясняющая роль, однако проверочные и практические (CHALLENGER и SANDBOX) в сумме составляют около 40 %.
+      </div>
+      <p class="caption" style="margin-top: 8px;">В журналах непосредственно прослеживается миграция эмбеддера: до середины мая поиск работал на e5-small (≈ 200 запросов), с 25 мая — на Qwen3 (106 запросов).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────────────────── 21. ЭКОНОМИКА ── -->
+<section class="slide" data-title="Экономика">
+  <div class="eyebrow"><span class="dot"></span>Удельная стоимость и unit-economics</div>
+  <h1>Подписка покрывает прямые расходы на ИИ <span class="accent">примерно в 160 раз</span></h1>
+
+  <div class="split balanced">
+    <div>
+      <p class="small">За период пилотной эксплуатации из личного кабинета DeepSeek получены данные о расходах на API. Анализ позволяет оценить унит-экономику сервиса при текущем профиле нагрузки.</p>
+
+      <table class="t" style="margin-top: 10px; font-size: 12px;">
+        <thead><tr><th>Показатель</th><th class="num">Значение</th></tr></thead>
+        <tbody>
+          <tr><td>Запросов в API</td><td class="num">703</td></tr>
+          <tr><td>Выходных токенов</td><td class="num">568 168</td></tr>
+          <tr><td>Доля попаданий в кэш входа</td><td class="num">32,2 %</td></tr>
+          <tr><td>Суммарная стоимость</td><td class="num">$ 0,327</td></tr>
+          <tr><td>Стоимость на запрос (медиана)</td><td class="num">≈ $ 0,000465</td></tr>
+          <tr class="highlight"><td>Стоимость на активного пользователя в месяц</td><td class="num">≈ $ 0,022 ≈ 2,2 ₽</td></tr>
+        </tbody>
+      </table>
+
+      <p class="caption">Кэш-токены оплачиваются по тарифу ×0,1 от обычных input-tokens, что вносит чувствительный вклад в снижение средней стоимости запроса.</p>
+    </div>
+    <div>
+      <div class="chart-wrap" style="height: 220px;">
+        <canvas id="chartEconomy"></canvas>
+      </div>
+
+      <div class="grid grid-2" style="margin-top: 10px;">
+        <div class="card green">
+          <div class="title">Покрытие API расходов</div>
+          <div class="big green">≈ 160×</div>
+          <div class="sub">при текущем профиле нагрузки</div>
+        </div>
+        <div class="card">
+          <div class="title">Конкуренты</div>
+          <div class="big">6–14×</div>
+          <div class="sub">дешевле сопоставимых сервисов</div>
+        </div>
+      </div>
+
+      <p class="caption">При <strong>пятикратном росте интенсивности</strong> использования и <strong>десятикратном росте</strong> доли reasoning-модели V4-Pro ROI остаётся на уровне ≈ 10×. Это даёт «запас прочности» для расширения использования V4-Pro в сложных запросах без риска ухудшить юнит-экономику.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────── 22. ОГРАНИЧЕНИЯ ─── -->
+<section class="slide" data-title="Ограничения">
+  <div class="eyebrow"><span class="dot"></span>Ограничения работы</div>
+  <h1>Что зафиксировано как <span class="accent">границы применимости</span> выводов</h1>
+
+  <p style="margin-bottom: 12px; font-size: 14px;">Полученные результаты следует интерпретировать с учётом границ их применимости, явно зафиксированных в работе. Каждое ограничение сопровождается количественной оценкой его влияния на интерпретацию выводов, где такая оценка возможна.</p>
+
+  <div class="grid grid-2">
+    <div class="card red">
+      <div class="title">Главное ограничение</div>
+      <h3 style="margin-top: 4px;">Отсутствие контролируемого педагогического эксперимента</h3>
+      <p class="small" style="margin-top: 4px;">Образовательный эффект (learning gain) измерен не был. Установление причинно-следственной связи между применением наставника и улучшением успеваемости требует выделения экспериментальной и контрольной групп — выходит за пределы настоящей работы.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">Статистическая мощность</div>
+      <h3 style="margin-top: 4px;">Малый объём эталонной выборки</h3>
+      <p class="small" style="margin-top: 4px;">Эталонный набор — 20 вопросов; стандартная ошибка ролевзвешенного показателя ≈ 0,05. Различия между моделями в этих пределах статистически не значимы. Роль MIRROR представлена 2 вопросами и носит иллюстративный характер.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">Self-judge bias</div>
+      <h3 style="margin-top: 4px;">Смещение оценки обоснованности</h3>
+      <p class="small" style="margin-top: 4px;">Судья (`deepseek-v4-flash`) — модель того же семейства, что одна из сравниваемых; faithfulness читается как верхняя граница. Контрольный прогон альтернативной моделью-судьёй (Qwen2.5-7B) дал практически идентичный результат — bias численно пренебрежим.</p>
+    </div>
+    <div class="card">
+      <div class="title">Объём пилота</div>
+      <h3 style="margin-top: 4px;">15 пользователей за 28 дней</h3>
+      <p class="small" style="margin-top: 4px;">Достаточно для подтверждения работоспособности телеметрии и базовой вовлечённости, но недостаточно для статистически значимых выводов о рыночной востребованности продукта или поведении целевой аудитории.</p>
+    </div>
+    <div class="card">
+      <div class="title">Document-level разметка</div>
+      <h3 style="margin-top: 4px;">Релевантность размечена на уровне документов</h3>
+      <p class="small" style="margin-top: 4px;">Эталонная разметка не учитывает, что часть документа может быть нерелевантной. Полученные значения точности извлечения — оценка сверху. Разметка на уровне фрагментов дала бы более чистые значения.</p>
+    </div>
+    <div class="card">
+      <div class="title">Накладные расходы</div>
+      <h3 style="margin-top: 4px;">Оценка стоимости — только API</h3>
+      <p class="small" style="margin-top: 4px;">Удельная стоимость учитывает только токены DeepSeek. В реальную точку безубыточности входят также постоянные (хостинг, Supabase Pro, домен) и переменные (платёжный шлюз) расходы.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────── 23. НАПРАВЛЕНИЯ РАЗВИТИЯ ─── -->
+<section class="slide" data-title="Направления развития">
+  <div class="eyebrow"><span class="dot"></span>Направления дальнейшего развития</div>
+  <h1>Шесть приоритетных направлений <span class="accent">упорядочены по важности</span></h1>
+
+  <div class="grid grid-2" style="margin-top: 6px;">
+    <div class="card tinted">
+      <div class="title">Приоритет 1</div>
+      <h3 style="margin-top: 4px;">Расширение учебного корпуса</h3>
+      <p class="small" style="margin-top: 4px;">У 7 из 20 эталонных вопросов часть релевантных источников не попадает даже в первую десятку кандидатов — это потолок, не устранимый настройкой весов гибридного поиска. Требуется расширение и точная разметка корпуса.</p>
+    </div>
+    <div class="card tinted">
+      <div class="title">Приоритет 2</div>
+      <h3 style="margin-top: 4px;">Интеграция платёжного шлюза</h3>
+      <p class="small" style="margin-top: 4px;">Запуск оплачиваемой подписки и эмпирическая проверка гипотезы H4 о готовности целевой аудитории платить 349 ₽/мес на реальных конверсиях.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">Приоритет 3</div>
+      <h3 style="margin-top: 4px;">Доработка телеметрии и аудита диалогов</h3>
+      <p class="small" style="margin-top: 4px;">Пересылка специализированных событий MindFlow в GA4 через Measurement Protocol; надёжное сохранение цитат во всех ветвях кода в таблицу <code>mentor_messages</code>; объявление конверсионных событий как ключевых в настройках GA4.</p>
+    </div>
+    <div class="card amber">
+      <div class="title">Приоритет 4</div>
+      <h3 style="margin-top: 4px;">Активация BKT на реальных попытках</h3>
+      <p class="small" style="margin-top: 4px;">Подключение реальных попыток в таблицу <code>bkt_attempts</code> для перехода персонального графа от LLM-извлекаемой оценки к статистически обоснованной байесовской; унификация идентификаторов концептов.</p>
+    </div>
+    <div class="card green">
+      <div class="title">Приоритет 5</div>
+      <h3 style="margin-top: 4px;">Контролируемый педагогический эксперимент</h3>
+      <p class="small" style="margin-top: 4px;">Единственная процедура, способная подтвердить причинно-следственное влияние наставника на академическую успеваемость — с выделением экспериментальной и контрольной групп на расширенной аудитории.</p>
+    </div>
+    <div class="card">
+      <div class="title">Приоритет 6</div>
+      <h3 style="margin-top: 4px;">Расширение методики оценки</h3>
+      <p class="small" style="margin-top: 4px;">Увеличение эталонного набора с равным распределением по ролям; систематическое применение независимой модели-судьи; настройка непрерывной интеграции основного приложения до уровня BKT-подпроекта.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────────── 24. ИТОГ ── -->
+<section class="slide" data-title="Итог">
+  <div class="eyebrow"><span class="dot"></span>Заключение</div>
+  <h1>Цель работы <span class="accent">достигнута</span>: разработан и эмпирически оценён работающий прототип</h1>
+
+  <div class="split balanced">
+    <div>
+      <p>В рамках работы пройден <strong>полный жизненный цикл разработки</strong> — от постановки эмпирически подтверждённой проблемы и проектирования концепции до реализации работающего MVP и его строгой эмпирической оценки.</p>
+
+      <h2 style="margin-top: 18px; margin-bottom: 6px;">Полученные результаты</h2>
+      <ol class="numbered" style="font-size: 14px;">
+        <li><strong>Работающий адаптивный AI-наставник</strong>, качество которого подтверждено измеримыми показателями на каждом из ключевых компонентов</li>
+        <li><strong>Переносимая методика оценки</strong> качества AI-наставника (ролевзвешенная рубрика, LLM-as-judge, бенчмарк извлечения) — применимая к иным образовательным системам на основе LLM</li>
+      </ol>
+    </div>
+    <div>
+      <h2 style="margin-bottom: 8px;">Ключевые числовые показатели</h2>
+      <div class="grid grid-2" style="gap: 8px;">
+        <div class="card tinted"><div class="title">MRR поиска</div><div class="big primary">+44 %</div><div class="sub">за счёт устранения дефектов конвейера</div></div>
+        <div class="card green"><div class="title">NDCG@10</div><div class="big green">+107 %</div><div class="sub">с переходом на Qwen3</div></div>
+        <div class="card amber"><div class="title">Pass rate</div><div class="big amber">85 %</div><div class="sub">прохождение эталонных вопросов</div></div>
+        <div class="card"><div class="title">Галлюцинации</div><div class="big">0 %</div><div class="sub">противоречий учебнику</div></div>
+        <div class="card tinted"><div class="title">PKG-aware A/B</div><div class="big primary">82 %</div><div class="sub">побед персонализации</div></div>
+        <div class="card green"><div class="title">Покрытие подпиской</div><div class="big green">≈ 160×</div><div class="sub">прямых API-расходов</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top: 14px;">
+    Именно <strong>сочетание эмпирически подтверждённых результатов с ясно сформулированными границами их применимости</strong> отличает добросовестную инженерную верификацию от формальной демонстрации работоспособности, на что и претендует настоящая работа.
+  </div>
+</section>
+
+<!-- ──────────────────────────────── 25. СПАСИБО ── -->
+<section class="slide" data-title="Спасибо">
+  <div class="hero" style="align-items: center; text-align: center;">
+    <div class="title" style="font-size: clamp(56px, 8vw, 110px);">Благодарю <span class="ring">за внимание</span></div>
+    <p class="sub" style="margin-top: 22px; text-align: center;">Готова ответить на вопросы.</p>
+    <div class="meta" style="justify-content: center; margin-top: 28px;">
+      <span><strong>MindFlow</strong></span>
+      <span>mindflow-edu.ru</span>
+      <span>github.com/EkaterinaGrisha/MindFlow</span>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<div class="hud">
+  <div class="hud-brand">MindFlow · защита ВКР · 2026</div>
+  <div class="hud-progress"><span id="progressBar"></span></div>
+  <div class="hud-counter"><span id="cur">1</span> / <span id="total">25</span></div>
+</div>
+
+<script>
+const C = {
+  primary: '#6366f1',
+  primaryLight: '#eef2ff',
+  primaryDark: '#4f46e5',
+  accent: '#7c3aed',
+  green: '#10b981',
+  amber: '#f59e0b',
+  red: '#ef4444',
+  cyan: '#06b6d4',
+  violet: '#8b5cf6',
+  text: '#1e293b',
+  muted: '#64748b',
+  border: '#e2e8f0',
+  surface: '#f8fafc',
+};
+
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let cur = 0;
+document.getElementById('total').textContent = total;
+
+function show(i) {
+  i = Math.max(0, Math.min(total - 1, i));
+  slides.forEach((s, idx) => {
+    s.classList.toggle('active', idx === i);
+    s.classList.toggle('prev', idx < i);
+  });
+  cur = i;
+  document.getElementById('cur').textContent = i + 1;
+  document.getElementById('progressBar').style.width = ((i + 1) / total * 100) + '%';
+  setTimeout(() => window.dispatchEvent(new Event('resize')), 380);
+}
+show(0);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(cur + 1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+  else if (e.key === 'Home') { e.preventDefault(); show(0); }
+  else if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+  else if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.hud') || e.target.closest('.hint') || e.target.closest('a')) return;
+  show(cur + 1);
+});
+
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = C.muted;
+Chart.defaults.plugins.legend.labels.usePointStyle = true;
+Chart.defaults.plugins.legend.labels.padding = 12;
+
+// 2. Market growth
+new Chart(document.getElementById('chartMarket'), {
+  type: 'bar',
+  data: {
+    labels: ['2024', '2025', '2026', '2027', '2028', '2029', '2030'],
+    datasets: [{
+      label: 'Мировой EdTech, $ млрд',
+      data: [330, 365, 404, 440, 480, 525, 580],
+      backgroundColor: ctx => ctx.dataIndex === 2 ? C.primary : C.muted,
+      borderRadius: 5,
+    }],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Прогноз мирового рынка EdTech, $ млрд (HolonIQ)', color: C.text, font: { size: 12, weight: '700' } },
+    },
+    scales: {
+      y: { beginAtZero: true, ticks: { color: C.muted }, grid: { color: C.border } },
+      x: { ticks: { color: C.muted }, grid: { display: false } },
+    },
+  },
+});
+
+// 7. Competitors
+new Chart(document.getElementById('chartCompetitors'), {
+  type: 'bar',
+  data: {
+    labels: ['MindFlow Pro', 'ChatGPT Plus', 'Brilliant', 'MathAcademy'],
+    datasets: [{
+      data: [349, 2000, 2500, 4900],
+      backgroundColor: [C.primary, C.muted, C.muted, C.muted],
+      borderRadius: 6,
+    }],
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Подписка, ₽/мес', color: C.text, font: { size: 12, weight: '700' } },
+    },
+    scales: {
+      x: { beginAtZero: true, ticks: { color: C.muted, callback: v => v.toLocaleString('ru-RU') }, grid: { color: C.border } },
+      y: { ticks: { color: C.text, font: { weight: '600' } }, grid: { display: false } },
+    },
+  },
+});
+
+// 12. Embeddings
+new Chart(document.getElementById('chartEmbeddings'), {
+  type: 'bar',
+  data: {
+    labels: ['Qwen3-0.6B', 'bge-m3', 'e5-large-instruct', 'e5-small (base)', 'e5-base', 'e5-large', 'LaBSE-en-ru', 'nomic (англ.)', 'mxbai (англ.)'],
+    datasets: [{
+      label: 'NDCG@10',
+      data: [0.754, 0.614, 0.378, 0.364, 0.358, 0.335, 0.150, 0.038, 0.029],
+      backgroundColor: ctx => {
+        const i = ctx.dataIndex;
+        if (i === 0) return C.primary;
+        if (i === 1) return C.violet;
+        if (i >= 7) return C.red;
+        return C.muted;
+      },
+      borderRadius: 5,
+    }],
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'NDCG@10 на корпусе MindFlow', color: C.text, font: { size: 12, weight: '700' } },
+    },
+    scales: {
+      x: { beginAtZero: true, max: 0.85, ticks: { color: C.muted }, grid: { color: C.border } },
+      y: { ticks: { color: C.text, font: { weight: '600', size: 10 } }, grid: { display: false } },
+    },
+  },
+});
+
+// 14. LLM scatter
+new Chart(document.getElementById('chartLlm'), {
+  type: 'scatter',
+  data: {
+    datasets: [
+      { label: 'DeepSeek-V4-Flash', data: [{ x: 23.5, y: 0.825 }], backgroundColor: C.primary, pointRadius: 13 },
+      { label: 'Gemma-4-E4B', data: [{ x: 55.6, y: 0.746 }], backgroundColor: C.green, pointRadius: 11 },
+      { label: 'DeepSeek-V4-Pro', data: [{ x: 48.8, y: 0.647 }], backgroundColor: C.violet, pointRadius: 11 },
+      { label: 'Nemotron-3-Nano', data: [{ x: 99.8, y: 0.548 }], backgroundColor: C.amber, pointRadius: 11 },
+      { label: 'Qwen3.6-27B', data: [{ x: 318.9, y: 0.474 }], backgroundColor: C.red, pointRadius: 11 },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } },
+      title: { display: true, text: 'Качество (RWS) vs задержка ответа (p50, с)', color: C.text, font: { size: 12, weight: '700' } },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.x.toFixed(1)} с / ${ctx.parsed.y.toFixed(3)}` } },
+    },
+    scales: {
+      x: { title: { display: true, text: 'Задержка p50, с', color: C.muted }, beginAtZero: true, ticks: { color: C.muted }, grid: { color: C.border } },
+      y: { title: { display: true, text: 'Ролевзвешенный показатель', color: C.muted }, beginAtZero: false, min: 0.4, max: 0.9, ticks: { color: C.muted }, grid: { color: C.border } },
+    },
+  },
+});
+
+// 15. BKT vs DKT
+new Chart(document.getElementById('chartBkt'), {
+  type: 'bar',
+  data: {
+    labels: ['BKT (классический)', 'DKT (нейросеть)'],
+    datasets: [
+      { label: 'AUC', data: [0.769, 0.724], backgroundColor: [C.primary, C.muted], borderRadius: 6 },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'AUC на синтетических данных (500 студентов × 24 концепта)', color: C.text, font: { size: 12, weight: '700' } },
+      tooltip: {
+        callbacks: {
+          label: ctx => `AUC: ${ctx.parsed.y.toFixed(3)}`,
+          afterLabel: ctx => ctx.dataIndex === 0 ? 'Параметров: 96 · точность 84 %' : 'Параметров: 33 656',
+        },
+      },
+    },
+    scales: {
+      y: { beginAtZero: false, min: 0.65, max: 0.8, ticks: { color: C.muted }, grid: { color: C.border } },
+      x: { ticks: { color: C.text, font: { weight: '600' } }, grid: { display: false } },
+    },
+  },
+});
+
+// 16. IRT curves
+const thetaPoints = Array.from({ length: 41 }, (_, i) => -3 + i * 0.15);
+function irtP(theta, b, a = 1.0, c = 0.25) {
+  return c + (1 - c) / (1 + Math.exp(-a * (theta - b)));
+}
+new Chart(document.getElementById('chartIrt'), {
+  type: 'line',
+  data: {
+    labels: thetaPoints.map(t => t.toFixed(1)),
+    datasets: [
+      { label: 'Лёгкий (b=−1)', data: thetaPoints.map(t => irtP(t, -1)), borderColor: C.green, backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.35, pointRadius: 0 },
+      { label: 'Средний (b=0)', data: thetaPoints.map(t => irtP(t, 0)), borderColor: C.primary, backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.35, pointRadius: 0 },
+      { label: 'Сложный (b=+1)', data: thetaPoints.map(t => irtP(t, 1)), borderColor: C.red, backgroundColor: 'transparent', borderWidth: 2.5, tension: 0.35, pointRadius: 0 },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } },
+      title: { display: true, text: 'P(верный ответ) vs способность θ (IRT 3PL)', color: C.text, font: { size: 12, weight: '700' } },
+    },
+    scales: {
+      x: { ticks: { color: C.muted, autoSkip: true, maxTicksLimit: 7 }, grid: { color: C.border }, title: { display: true, text: 'Способность студента θ', color: C.muted } },
+      y: { min: 0, max: 1, ticks: { color: C.muted }, grid: { color: C.border } },
+    },
+  },
+});
+
+// 17. Retrieval progression
+new Chart(document.getElementById('chartRetrieval'), {
+  type: 'bar',
+  data: {
+    labels: ['Precision@5', 'Recall@5', 'MRR'],
+    datasets: [
+      { label: 'Базовый конвейер', data: [0.362, 0.258, 0.475], backgroundColor: C.muted, borderRadius: 5 },
+      { label: 'После оптимизации', data: [0.403, 0.448, 0.683], backgroundColor: C.primary, borderRadius: 5 },
+    ],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } },
+      title: { display: true, text: 'Метрики поиска: до / после оптимизации', color: C.text, font: { size: 12, weight: '700' } },
+    },
+    scales: {
+      y: { beginAtZero: true, max: 0.8, ticks: { color: C.muted }, grid: { color: C.border } },
+      x: { ticks: { color: C.text, font: { weight: '600' } }, grid: { display: false } },
+    },
+  },
+});
+
+// 19. PKG A/B
+new Chart(document.getElementById('chartPkg'), {
+  type: 'bar',
+  data: {
+    labels: ['PKG-aware побеждает', 'Baseline побеждает'],
+    datasets: [{
+      data: [41, 9],
+      backgroundColor: [C.primary, C.muted],
+      borderRadius: 6,
+    }],
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Слепое A/B-сравнение, n = 50 вопросов', color: C.text, font: { size: 12, weight: '700' } },
+      tooltip: { callbacks: { label: ctx => `${ctx.parsed.x} / 50 (${(ctx.parsed.x * 2)} %)` } },
+    },
+    scales: {
+      x: { beginAtZero: true, max: 50, ticks: { color: C.muted, stepSize: 10 }, grid: { color: C.border } },
+      y: { ticks: { color: C.text, font: { weight: '600' } }, grid: { display: false } },
+    },
+  },
+});
+
+// 20. Roles
+new Chart(document.getElementById('chartRoles'), {
+  type: 'doughnut',
+  data: {
+    labels: ['LECTURER · 60 %', 'SANDBOX · 16 %', 'CHALLENGER · 15 %', 'MIRROR · 9 %'],
+    datasets: [{
+      data: [184, 48, 47, 29],
+      backgroundColor: [C.primary, C.green, C.red, C.amber],
+      borderWidth: 0,
+    }],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '60 %',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 11 } } },
+      title: { display: true, text: 'Распределение ролей наставника (308 запросов)', color: C.text, font: { size: 12, weight: '700' } },
+    },
+  },
+});
+
+// 21. Economy
+new Chart(document.getElementById('chartEconomy'), {
+  type: 'bar',
+  data: {
+    labels: ['API DeepSeek', 'Тариф Pro'],
+    datasets: [{
+      data: [2.2, 349],
+      backgroundColor: [C.muted, C.primary],
+      borderRadius: 6,
+    }],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: 'Расход API vs подписка, ₽/мес/пользователь', color: C.text, font: { size: 12, weight: '700' } },
+      tooltip: { callbacks: { label: ctx => `${ctx.parsed.y} ₽/мес` } },
+    },
+    scales: {
+      y: { beginAtZero: true, ticks: { color: C.muted, callback: v => v + ' ₽' }, grid: { color: C.border }, type: 'logarithmic' },
+      x: { ticks: { color: C.text, font: { weight: '600' } }, grid: { display: false } },
+    },
+  },
+});
+
+</script>
+</body>
+</html>
