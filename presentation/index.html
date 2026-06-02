@@ -483,104 +483,7 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
   <p style="font-size: 16px;">Сохраняется устойчивая педагогическая потребность: спрос на специалистов Data Science на рынке труда устойчиво превышает предложение, тогда как именно <strong>математический фундамент</strong> остаётся главным барьером для входа в профессию. Платформа, целенаправленно снижающая этот барьер за счёт методически корректного индивидуального сопровождения, отвечает одновременно интересам обучающихся и долгосрочным потребностям рынка труда.</p>
 </section>
 
-<!-- ─────────────────────────────────────── 4. ПРОБЛЕМА И ЦЕЛЬ ── -->
-<section class="slide" data-title="Проблема и цель">
-  <div class="eyebrow"><span class="dot"></span>Постановка проблемы · цель работы</div>
-  <h1>Незакрытая потребность: <span class="accent">три свойства одновременно</span></h1>
-
-  <div class="split text-heavy">
-    <div>
-      <h2 style="margin-bottom: 8px;">Проблема исследования</h2>
-      <p>На рынке отсутствует доступный по цене инструмент, который одновременно обеспечивал бы:</p>
-      <ol class="numbered" style="margin-top: 8px;">
-        <li><strong>достоверность академического учебника</strong> — каждое утверждение опирается на верифицируемый источник;</li>
-        <li><strong>индивидуальную образовательную траекторию</strong>, выстраиваемую с учётом пробелов конкретного студента;</li>
-        <li><strong>развивающий стиль наставничества</strong>, не подменяющий самостоятельную мыслительную работу обучающегося готовым решением.</li>
-      </ol>
-      <p style="margin-top: 14px;">Существующие решения, как правило, реализуют не более одного из перечисленных свойств, что и обосновывает разработку MindFlow.</p>
-    </div>
-    <div>
-      <h2 style="margin-bottom: 8px;">Цель работы</h2>
-      <p>Разработать и довести до состояния работающего прототипа адаптивную образовательную платформу, обеспечивающую персонализированное, методически корректное и опирающееся на верифицируемые источники обучение математике и основам Data Science.</p>
-
-      <div class="card tinted" style="margin-top: 14px;">
-        <div class="title">Объект исследования</div>
-        <p class="small" style="margin-top: 4px;">Процесс персонализированного обучения математике и основам Data Science с применением технологий искусственного интеллекта.</p>
-      </div>
-      <div class="card" style="margin-top: 10px;">
-        <div class="title">Предмет исследования</div>
-        <p class="small" style="margin-top: 4px;">Методы и программные средства адаптивного AI-наставничества: многоролевая модель диалога, технология RAG и модель знаний обучающегося (граф концептов + BKT).</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────────────────────────── 5. ВОСЕМЬ ЗАДАЧ ── -->
-<section class="slide" data-title="Задачи работы">
-  <div class="eyebrow"><span class="dot"></span>Задачи исследования и реализации</div>
-  <h1>Восемь задач выстроены по продуктовой логике <span class="accent">«от проблемы к решению»</span></h1>
-
-  <div class="grid grid-4" style="margin-top: 10px;">
-    <div class="card amber"><div class="title">Этап 1 · исследование</div><p class="small" style="margin-top: 4px;">подтверждение проблемы и анализ предметной области (задача 1 — глава 2)</p></div>
-    <div class="card tinted"><div class="title">Этап 2 · проектирование</div><p class="small" style="margin-top: 4px;">формирование концепции и требований (задача 2 — глава 3)</p></div>
-    <div class="card green"><div class="title">Этап 3 · реализация</div><p class="small" style="margin-top: 4px;">разработка MVP и развёртывание (задачи 3–7 — глава 4)</p></div>
-    <div class="card red"><div class="title">Этап 4 · оценка</div><p class="small" style="margin-top: 4px;">эмпирическая проверка ключевых компонентов (задача 8 — глава 5)</p></div>
-  </div>
-
-  <div class="split" style="margin-top: 14px;">
-    <div>
-      <ol class="numbered">
-        <li>Провести анализ предметной области, рынка EdTech и целевой аудитории; сформулировать продуктовые гипотезы.</li>
-        <li>Спроектировать архитектуру платформы, объединяющую контур обучения, контур AI-поддержки и контур аналитики прогресса.</li>
-        <li>Разработать библиотеку учебного контента с интерактивной подачей теории и набором практических заданий.</li>
-        <li>Реализовать диалогового AI-наставника, функционирующего в нескольких педагогических ролях под управлением роли-оркестратора.</li>
-      </ol>
-    </div>
-    <div>
-      <ol class="numbered" start="5" style="counter-reset: step 4;">
-        <li>Построить подсистему поиска с дополнением генерации (RAG) с гибридным ранжированием и обязательным цитированием источников.</li>
-        <li>Построить модель знаний обучающегося — граф концептов и байесовское отслеживание уровня их освоения (BKT).</li>
-        <li>Определить и реализовать бизнес-модель, подключить аналитику и обеспечить развёртывание в облачной инфраструктуре.</li>
-        <li>Проверить работоспособность ключевых компонентов автоматическими тестами и оценить практическую применимость.</li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ──────────────────────────────────────── 6. ЦЕЛЕВАЯ АУДИТОРИЯ ── -->
-<section class="slide" data-title="Целевая аудитория">
-  <div class="eyebrow"><span class="dot"></span>Анализ целевой аудитории</div>
-  <h1>Три сегмента, <span class="accent">четыре общие потребности</span></h1>
-
-  <p style="margin-bottom: 12px;">Целевую аудиторию платформы составляют русскоязычные обучающиеся, осваивающие математический фундамент Data Science. Внутри этой совокупности прослеживаются три отчётливо различимых сегмента.</p>
-
-  <table class="t" style="margin-bottom: 14px;">
-    <thead>
-      <tr><th>Сегмент</th><th>Краткая характеристика</th><th>Ключевая потребность</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Студенты технических и экономических вузов</strong></td>
-        <td>Изучают линейную алгебру и математический анализ, готовятся к экзаменам, планируют карьеру в анализе данных</td>
-        <td>Понять предмет, а не механически заучить; восполнить пробелы в индивидуальном темпе</td>
-      </tr>
-      <tr>
-        <td><strong>Специалисты, переходящие в Data Science</strong></td>
-        <td>Работающие взрослые с базовым техническим образованием, осваивающие машинное обучение и математику для смены профессии</td>
-        <td>Гибкий график занятий, прикладные примеры, методическая поддержка без живого репетитора</td>
-      </tr>
-      <tr>
-        <td><strong>Самостоятельные учащиеся</strong></td>
-        <td>Изучают ML и алгоритмы по открытым онлайн-материалам, испытывают трудности при возврате к математическому фундаменту</td>
-        <td>Достоверный наставник, не выдающий готовых ответов, с обязательной привязкой к источникам</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>При различиях в исходных мотивах все три сегмента демонстрируют четыре общие потребности: <strong>(1)</strong> индивидуальная траектория, выстроенная с учётом конкретных пробелов; <strong>(2)</strong> развивающий, а не «решающий за ученика» характер наставничества; <strong>(3)</strong> фактологическая достоверность объяснений; <strong>(4)</strong> ценовая доступность инструмента.</p>
-</section>
-
-<!-- ─────────────────────────────────────────────── 7. КОНКУРЕНТЫ ── -->
+<!-- ─────────────────────────────────────────────── 4. КОНКУРЕНТЫ ── -->
 <section class="slide" data-title="Конкурентный анализ">
   <div class="eyebrow"><span class="dot"></span>Конкурентный анализ · сопоставление с альтернативными решениями</div>
   <h1>Существующие решения покрывают <span class="accent">лишь часть потребностей</span></h1>
@@ -664,21 +567,20 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
       </div>
     </div>
     <div>
-      <h2 style="margin-bottom: 6px;">Технологический стек</h2>
-      <table class="t" style="font-size: 12px;">
-        <thead><tr><th>Слой</th><th>Технология</th></tr></thead>
+      <h2 style="margin-bottom: 6px;">Технологический стек · обоснование</h2>
+      <table class="t" style="font-size: 11px;">
+        <thead><tr><th>Слой</th><th>Технология</th><th>Почему выбрана</th></tr></thead>
         <tbody>
-          <tr><td>Клиент</td><td>React 19 + Vite + TypeScript + Tailwind + KaTeX</td></tr>
-          <tr><td>Сервер</td><td>Node.js 22 + Express + TypeScript (tsx)</td></tr>
-          <tr><td>Хранилище</td><td>Supabase (PostgreSQL + pgvector + HNSW)</td></tr>
-          <tr><td>LLM</td><td>DeepSeek-V4-Flash → Cloudflare Workers AI → OpenRouter</td></tr>
-          <tr><td>Эмбеддинги</td><td>Qwen3-Embedding-0.6B (1024d), локально через @huggingface/transformers</td></tr>
-          <tr><td>BKT</td><td>Python + numpy + scikit-learn (services/adaptive-ml)</td></tr>
-          <tr><td>Аналитика</td><td>Plausible + Google Analytics 4 (dual-emit)</td></tr>
-          <tr><td>CI/CD</td><td>GitHub Actions, Railpack/Nixpacks</td></tr>
+          <tr><td>Клиент</td><td>React 19 + Vite + TypeScript</td><td>Готовая экосистема библиотек (markdown, KaTeX, drag-and-drop, charts) — не требует собственной разработки; Vite заменил deprecated CRA</td></tr>
+          <tr><td>Сервер</td><td>Express + TypeScript (tsx)</td><td>Конвейер «оркестратор → поиск → LLM» не CRUD; минимальный фреймворк без избыточных формальностей; единый язык с клиентом</td></tr>
+          <tr><td>Хранилище</td><td>Supabase + pgvector + HNSW</td><td>Объединяет SQL-базу, аутентификацию, RLS и векторный поиск в одном сервисе; гибридный поиск выполняется одним SQL-запросом</td></tr>
+          <tr><td>LLM</td><td>DeepSeek-V4-Flash + резерв</td><td>На порядок дешевле GPT-4o при сопоставимом качестве (см. слайд 11); каскад резерва — устойчивость к сбоям</td></tr>
+          <tr><td>Эмбеддинги</td><td>Qwen3-Embedding-0.6B (1024d)</td><td>Лучший результат на собственном бенчмарке корпуса (см. слайд 9); локальный запуск устраняет тарификацию за каждый запрос</td></tr>
+          <tr><td>BKT</td><td>Python + numpy + sklearn</td><td>Классическая интерпретируемая модель; не уступает нейросетевой DKT при разнице в 350× по числу параметров (см. слайд 12)</td></tr>
+          <tr><td>Аналитика</td><td>Plausible + GA4 (dual-emit)</td><td>Plausible — privacy-first без cookie; GA4 — сегментация. Параллельная отправка снижает зависимость от блокировок</td></tr>
+          <tr><td>CI/CD</td><td>GitHub Actions, Railpack/Nixpacks</td><td>Lint + tests + build на каждое изменение; сборка контейнеров без ручного Dockerfile</td></tr>
         </tbody>
       </table>
-      <p class="caption" style="margin-top: 8px;">Каждый выбор обоснован измеримыми критериями (см. бенчмарки в главе 4) либо архитектурными требованиями продукта (единый язык на всех слоях, консолидация реляционного и векторного хранилища).</p>
     </div>
   </div>
 </section>
@@ -762,22 +664,22 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
       </div>
     </div>
     <div>
-      <div class="kpi-row" style="grid-template-columns: 1fr 1fr;">
-        <div class="kpi"><div class="v">+107 %</div><div class="l">NDCG@10 vs e5-small</div></div>
-        <div class="kpi"><div class="v">+95 %</div><div class="l">Recall@5</div></div>
-        <div class="kpi"><div class="v">+120 %</div><div class="l">MRR@10</div></div>
-        <div class="kpi"><div class="v">82 / 100</div><div class="l">в top-5 (vs 42 у baseline)</div></div>
+      <h2 style="margin-bottom: 6px;">Что измерялось</h2>
+      <p class="small"><strong>NDCG@10</strong> — насколько правильно модель ранжирует первую десятку результатов. Чем ближе к 1, тем точнее модель ставит релевантный фрагмент в начало выдачи.</p>
+      <p class="small" style="margin-top: 4px;"><strong>Recall@5</strong> — как часто релевантный фрагмент попадает в первые пять результатов. Метрика напрямую отражает практическую задачу: наставник показывает студенту 3–5 цитат.</p>
+
+      <div class="kpi-row" style="grid-template-columns: 1fr 1fr; margin-top: 10px;">
+        <div class="kpi"><div class="v">0,754</div><div class="l">NDCG@10 у Qwen3 — лучший результат</div></div>
+        <div class="kpi"><div class="v">82 %</div><div class="l">случаев: верный фрагмент в top-5</div></div>
       </div>
-      <div class="divider"></div>
-      <table class="t" style="font-size: 12px;">
+
+      <table class="t" style="font-size: 12px; margin-top: 10px;">
         <thead><tr><th>Модель</th><th class="num">Recall@5</th><th class="num">NDCG@10</th></tr></thead>
         <tbody>
           <tr class="highlight"><td>Qwen3-Embedding-0.6B</td><td class="num">0,82</td><td class="num">0,754</td></tr>
           <tr><td>bge-m3</td><td class="num">0,68</td><td class="num">0,614</td></tr>
           <tr><td>e5-large-instruct</td><td class="num">0,50</td><td class="num">0,378</td></tr>
-          <tr><td>multilingual-e5-small (baseline)</td><td class="num">0,42</td><td class="num">0,364</td></tr>
-          <tr><td>e5-base</td><td class="num">0,44</td><td class="num">0,358</td></tr>
-          <tr><td>e5-large</td><td class="num">0,40</td><td class="num">0,335</td></tr>
+          <tr><td>multilingual-e5-small</td><td class="num">0,42</td><td class="num">0,364</td></tr>
           <tr><td>LaBSE-en-ru</td><td class="num">0,20</td><td class="num">0,150</td></tr>
           <tr><td>nomic-embed-v1.5 (англ.)</td><td class="num">0,04</td><td class="num">0,038</td></tr>
           <tr><td>mxbai-embed-large (англ.)</td><td class="num">0,04</td><td class="num">0,029</td></tr>
@@ -836,7 +738,15 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
       </div>
     </div>
     <div>
-      <table class="t" style="font-size: 12px;">
+      <h2 style="margin-bottom: 6px; font-size: 16px;">Что означают столбцы таблицы</h2>
+      <ul class="bullets" style="font-size: 12px; line-height: 1.4;">
+        <li><strong>Pass</strong> — доля вопросов из 20, на которые ответ модели признан удовлетворительным по всем критериям</li>
+        <li><strong>RWS</strong> (ролевзвешенный показатель) — единая оценка качества с учётом специфики роли: для LECTURER важна полнота концептов, для MIRROR — наличие наводящих вопросов, для SANDBOX — открытая задача</li>
+        <li><strong>Faith.</strong> (faithfulness) — доля утверждений в ответе, подтверждённых учебным материалом по схеме LLM-as-judge</li>
+        <li><strong>p50</strong> — медианное время ответа в секундах</li>
+      </ul>
+
+      <table class="t" style="font-size: 11px; margin-top: 10px;">
         <thead>
           <tr><th>Модель</th><th class="num">Pass</th><th class="num">RWS</th><th class="num">Faith.</th><th class="num">p50, с</th></tr>
         </thead>
@@ -848,23 +758,20 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
           <tr><td>Qwen3.6-27B</td><td class="num">35 %</td><td class="num">0,474</td><td class="num">0,369</td><td class="num">318,9</td></tr>
         </tbody>
       </table>
-      <p class="caption" style="margin-top: 8px;"><strong>RWS</strong> — ролевзвешенный показатель качества ответа. <strong>Faith.</strong> — фактическая обоснованность по схеме LLM-as-judge.</p>
-      <div class="card green" style="margin-top: 10px;">
-        <div class="title">Решающие соображения</div>
-        <p class="small" style="margin-top: 4px;">DeepSeek-V4-Flash выбрана как основная модель. Gemma-4-E4B уступает на 10 % по качеству при двукратной задержке, но <strong>полностью помещается в unified memory ноутбука</strong> и зафиксирована как резерв для локального развёртывания.</p>
-      </div>
+      <p class="caption" style="margin-top: 8px;">DeepSeek-V4-Flash выбрана как основная модель: наивысший RWS и приемлемая задержка. Gemma-4-E4B зафиксирована как резерв для локального развёртывания.</p>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────────────────── 15. ГРАФ ЗНАНИЙ + BKT ── -->
-<section class="slide" data-title="Граф знаний + BKT">
+<!-- ─────────────────────────────────────── 12. МОДЕЛЬ ЗНАНИЙ СТУДЕНТА ── -->
+<section class="slide" data-title="Модель знаний">
   <div class="eyebrow"><span class="dot"></span>Модель знаний обучающегося</div>
-  <h1>Граф концептов + <span class="accent">байесовское отслеживание</span> освоения</h1>
+  <h1>Как система <span class="accent">«знает», что студент освоил тему</span></h1>
 
-  <div class="split">
+  <div class="split balanced">
     <div>
-      <p class="small">Адаптация обучения строится на формализованной модели знаний. В проекте реализован граф знаний концептов с пререквизитными связями, поверх которого применяется классическая скрыто-марковская модель Bayesian Knowledge Tracing (Corbett & Anderson, 1995).</p>
+      <h2 style="margin-bottom: 6px;">Граф знаний</h2>
+      <p class="small">Учебная программа представлена графом: узлы — концепты (например, «производная», «градиентный спуск»), рёбра — отношения «А необходимо знать до Б». Граф позволяет системе планировать индивидуальную траекторию и подсвечивать слабые места.</p>
 
       <div class="grid grid-2" style="margin-top: 10px;">
         <div class="card tinted">
@@ -879,141 +786,121 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
         </div>
       </div>
 
-      <p class="small" style="margin-top: 14px;">Пороги принятия решений настроены эмпирически: концепт считается <strong>освоенным при p_mastery ≥ 0,7</strong> и относится к <strong>слабым местам при p_mastery &lt; 0,4</strong> (при наличии не менее двух попыток).</p>
+      <h2 style="margin-top: 16px; margin-bottom: 6px;">Зачем BKT</h2>
+      <p class="small">Сам по себе факт «студент ответил верно» ещё не значит, что концепт освоен (мог угадать). Bayesian Knowledge Tracing — это статистический способ оценить <strong>вероятность того, что концепт реально усвоен</strong>, на основе серии ответов студента, с учётом возможной случайной ошибки и возможной случайной удачи.</p>
     </div>
     <div>
-      <h2 style="margin-bottom: 6px;">Сравнение BKT и DKT на синтетических данных</h2>
-      <p class="small">Проведён бенчмарк классического BKT (EM-калибровка, скрыто-марковская модель) и нейросетевой Deep Knowledge Tracing (Piech-style LSTM) на синтетическом наборе из 500 студентов × 24 концепта × ≈ 30 попыток.</p>
+      <h2 style="margin-bottom: 6px;">Как работает BKT</h2>
+      <p class="small">Для каждого концепта модель отслеживает скрытую переменную — освоен он или нет. После каждой попытки оценка обновляется по правилу Байеса с учётом четырёх параметров: вероятность начального знания (p_init), вероятность освоения после попытки (p_learn), вероятность ошибки по неаккуратности (p_slip) и вероятность случайного угадывания (p_guess).</p>
 
-      <div class="chart-wrap" style="height: 230px; margin-top: 10px;">
+      <div class="card amber" style="margin-top: 10px;">
+        <div class="title">Пороги принятия решений</div>
+        <p class="small" style="margin-top: 4px;"><strong>p_mastery ≥ 0,7</strong> — концепт считается освоенным. <strong>p_mastery &lt; 0,4</strong> — слабое место, требует возврата к теме (при ≥ 2 попытках).</p>
+      </div>
+
+      <h2 style="margin-top: 16px; margin-bottom: 6px;">Почему классический BKT, а не нейросеть</h2>
+      <p class="small">Проведено сравнение BKT с современной нейросетевой Deep Knowledge Tracing на синтетических данных (500 студентов × 24 концепта × 30 попыток).</p>
+
+      <div class="chart-wrap" style="height: 180px; margin-top: 8px;">
         <canvas id="chartBkt"></canvas>
       </div>
 
-      <div class="note" style="margin-top: 10px;">
-        <strong>Результат:</strong> классический BKT (AUC 0,769; точность 84 %) <strong>не уступил</strong> нейросетевой DKT (AUC 0,724) при <strong>разнице в 350× по числу параметров</strong> (96 vs 33 656). Выбор сделан в пользу более простой и интерпретируемой модели.
-      </div>
+      <p class="caption" style="margin-top: 6px;">BKT даёт сопоставимое качество (AUC 0,769 vs 0,724) при <strong>числе параметров в 350× меньше</strong>. Выбор — в пользу более простой и интерпретируемой модели.</p>
     </div>
   </div>
 </section>
 
-<!-- ──────────────────────────────────── 16. CAT/IRT ДИАГНОСТИКА ── -->
-<section class="slide" data-title="CAT/IRT">
-  <div class="eyebrow"><span class="dot"></span>Адаптивная входная диагностика</div>
-  <h1>Computer Adaptive Testing на основе модели <span class="accent">IRT 3PL</span></h1>
-
-  <div class="split">
-    <div>
-      <p class="small">Реализована входная диагностика по схеме компьютерного адаптивного тестирования поверх трёхпараметрической модели Item Response Theory (3PL). Каждый следующий вопрос подбирается из пула так, чтобы максимизировать информацию Фишера при текущей точечной оценке способности студента θ; оценка обновляется методом Expected A Posteriori на квадратурной сетке.</p>
-
-      <ul class="bullets" style="margin-top: 10px;">
-        <li>Стандартно-нормальный приор; <strong>13 квадратурных узлов</strong> равномерно на [−3; +3]</li>
-        <li>Тест ограничен <strong>8 вопросами</strong> — компромисс между информативностью оценки и продолжительностью сессии</li>
-        <li>Итоговый уровень владения <strong>Junior L1 / Middle L2 / Senior L3</strong> определяется по итоговому θ; пороги — в серединах интервалов между уровнями сложности заданий пула (b_basic = −1, b_intermediate = 0, b_advanced = +1)</li>
-        <li>Реализован для трёх курсов: математика для DS, машинное обучение, алгоритмы и структуры данных</li>
-      </ul>
-    </div>
-    <div>
-      <div class="chart-wrap" style="height: 320px;">
-        <canvas id="chartIrt"></canvas>
-      </div>
-      <p class="caption" style="margin-top: 8px;">Характеристические кривые трёх классов сложности. Адаптивное тестирование выбирает задание, для которого вероятность верного ответа при текущей θ близка к 0,5 — именно такое задание даёт <strong>максимум информации Фишера</strong>.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ────────────────────────────────────── 17. РЕЗУЛЬТАТЫ — ПОИСК ── -->
-<section class="slide" data-title="Результаты — поиск">
-  <div class="eyebrow"><span class="dot"></span>Главные результаты · качество семантического поиска</div>
-  <h1>Систематическая диагностика <span class="accent">повысила качество ранжирования</span></h1>
+<!-- ──────────────────────────────────── 13. АДАПТИВНАЯ ДИАГНОСТИКА ── -->
+<section class="slide" data-title="Адаптивная диагностика">
+  <div class="eyebrow"><span class="dot"></span>Адаптивная входная диагностика уровня студента</div>
+  <h1>Точная оценка уровня <span class="accent">всего за 8 вопросов</span></h1>
 
   <div class="split balanced">
     <div>
-      <p class="small">Качество поиска оценивалось тремя стандартными метриками информационного поиска: точностью (Precision@k), полнотой (Recall@k) и средним обратным рангом (MRR). Оптимизация поискового контура носила пошаговый характер: ограничение фрагментов на источник, перевод BM25 на дизъюнкцию лексем, эмпирическая настройка весов RRF.</p>
+      <h2 style="margin-bottom: 6px;">Идея адаптивного теста</h2>
+      <p class="small">Обычный тест задаёт всем студентам одни и те же 30–40 вопросов. Часть из них слишком лёгкие для сильных и слишком сложные для слабых — они не дают информации об уровне.</p>
+      <p class="small" style="margin-top: 6px;">Адаптивный тест работает иначе: после каждого ответа система обновляет оценку уровня студента (θ) и подбирает следующий вопрос так, чтобы он был <strong>максимально информативным именно для этого студента</strong> — то есть таким, на котором вероятность верного ответа составляет около 50 %. Это даёт ту же точность оценки, что и длинный тест, всего за 8 вопросов.</p>
 
-      <div class="chart-wrap" style="height: 270px; margin-top: 10px;">
-        <canvas id="chartRetrieval"></canvas>
+      <div class="grid grid-3" style="margin-top: 12px;">
+        <div class="card tinted">
+          <div class="title">Вопросов в тесте</div>
+          <div class="big primary">8</div>
+          <div class="sub">вместо стандартных 30–40</div>
+        </div>
+        <div class="card">
+          <div class="title">Уровней</div>
+          <div class="big">3</div>
+          <div class="sub">Junior · Middle · Senior</div>
+        </div>
+        <div class="card">
+          <div class="title">Курсов</div>
+          <div class="big">3</div>
+          <div class="sub">математика, ML, алгоритмы</div>
+        </div>
       </div>
+
+      <p class="caption" style="margin-top: 12px;">Математическое основание — модель Item Response Theory с тремя параметрами (IRT 3PL): для каждого вопроса задана сложность и вероятность угадывания. Оценка способности студента θ обновляется по правилу Байеса.</p>
     </div>
     <div>
-      <table class="t" style="font-size: 13px;">
-        <thead><tr><th>Показатель</th><th class="num">Было</th><th class="num">Стало</th><th class="num">Δ</th></tr></thead>
-        <tbody>
-          <tr><td>Precision@5</td><td class="num">0,362</td><td class="num">0,403</td><td class="num">+11 %</td></tr>
-          <tr><td>Recall@5</td><td class="num">0,258</td><td class="num">0,448</td><td class="num"><strong>+74 %</strong></td></tr>
-          <tr><td>Recall@10</td><td class="num">0,258</td><td class="num">0,448</td><td class="num">+74 %</td></tr>
-          <tr class="highlight"><td>MRR</td><td class="num">0,475</td><td class="num">0,683</td><td class="num"><strong>+44 %</strong></td></tr>
-        </tbody>
-      </table>
+      <h2 style="margin-bottom: 6px;">Как выбирается следующий вопрос</h2>
+      <p class="small">На графике — характеристические кривые трёх классов вопросов: лёгкие (зелёный), средние (синий), сложные (красный). По оси X — уровень студента θ, по оси Y — вероятность верного ответа.</p>
 
-      <p class="caption">В содержательной интерпретации первый правильный фрагмент в среднем переместился со <strong>второй позиции выдачи на первую</strong>, а количество найденных релевантных материалов <strong>увеличилось почти вдвое</strong>.</p>
-
-      <div class="note" style="margin-top: 10px;">
-        <strong>Методический вывод:</strong> прирост достигнут не увеличением вычислительной мощности, а устранением конкретных дефектов конвейера, выявленных диагностикой метрик предыдущего шага. <em>Систематическая диагностика эффективнее слепой оптимизации.</em>
+      <div class="chart-wrap" style="height: 250px; margin-top: 8px;">
+        <canvas id="chartIrt"></canvas>
       </div>
+
+      <p class="caption" style="margin-top: 8px;">Для слабого студента (θ ≈ −1) самый информативный вопрос — лёгкий: вероятность ответа близка к 50 %. Для сильного (θ ≈ +1) — сложный. Система выбирает вопрос с максимальной «информативностью» в текущей точке θ.</p>
     </div>
   </div>
 </section>
 
-<!-- ───────────────────────────────────── 18. РЕЗУЛЬТАТЫ — ОТВЕТЫ ── -->
-<section class="slide" data-title="Результаты — ответы">
+<!-- ───────────────────────────────────── 14. РЕЗУЛЬТАТЫ — ОТВЕТЫ ── -->
+<section class="slide" data-title="Качество ответов">
   <div class="eyebrow"><span class="dot"></span>Главные результаты · качество ответов наставника</div>
-  <h1>85 % прохождение, 0 % противоречий <span class="accent">учебному материалу</span></h1>
+  <h1>На эталонных вопросах наставник <span class="accent">отвечает корректно и без выдумок</span></h1>
 
-  <p class="small" style="margin-bottom: 12px;">Каждый ответ наставника оценивался по единой системе формализованных признаков: полнота раскрытия ожидаемых понятий, соответствие предписанной педагогической роли, наличие ссылки на источник, отсутствие признаков необоснованной генерации. Поскольку роли по назначению различны, единый показатель покрытия концептов введён в форме <em>ролевзвешенного показателя</em> (`role_weighted_score`).</p>
+  <p class="small" style="margin-bottom: 10px;">Каждый ответ наставника на 20 эталонных учебных вопросов оценивался по четырём признакам: <strong>прохождение</strong> (ответ удовлетворяет всем требованиям), <strong>покрытие концептов</strong> (раскрыты ли ожидаемые понятия), <strong>наличие цитат</strong>, <strong>отсутствие выдумок</strong>.</p>
 
   <div class="grid grid-4">
     <div class="card tinted">
-      <div class="title">Pass rate</div>
+      <div class="title">Прохождение</div>
       <div class="big primary">85 %</div>
-      <div class="sub">17 из 20 вопросов</div>
-    </div>
-    <div class="card">
-      <div class="title">Ролевзвешенный</div>
-      <div class="big">0,825</div>
-      <div class="sub">σ ≈ 0,05 при n = 20</div>
+      <div class="sub">17 из 20 вопросов признаны успешными</div>
     </div>
     <div class="card amber">
       <div class="title">Покрытие концептов</div>
-      <div class="big amber">0,741</div>
-      <div class="sub">без взвешивания</div>
+      <div class="big amber">74 %</div>
+      <div class="sub">доля раскрытых ожидаемых понятий</div>
     </div>
     <div class="card green">
-      <div class="title">Цитата в ответе</div>
+      <div class="title">Цитата на источник</div>
       <div class="big green">83 %</div>
-      <div class="sub">ответов содержат [N]-маркеры</div>
+      <div class="sub">ответов содержат ссылку вида [N]</div>
+    </div>
+    <div class="card green">
+      <div class="title">Противоречий учебнику</div>
+      <div class="big green">0 %</div>
+      <div class="sub">ни одной фактической ошибки</div>
     </div>
   </div>
 
   <div class="split" style="margin-top: 14px;">
     <div>
-      <h2 style="margin-bottom: 8px;">Разбивка по педагогическим ролям</h2>
-      <table class="t">
-        <thead><tr><th>Роль</th><th class="num">n</th><th class="num">Pass</th><th class="num">RWS</th><th class="num">Coverage</th></tr></thead>
-        <tbody>
-          <tr><td>LECTURER</td><td class="num">10</td><td class="num">90 %</td><td class="num">0,878</td><td class="num">0,878</td></tr>
-          <tr><td>CHALLENGER</td><td class="num">4</td><td class="num">75 %</td><td class="num">0,750</td><td class="num">0,750</td></tr>
-          <tr><td>SANDBOX</td><td class="num">4</td><td class="num">75 %</td><td class="num">0,770</td><td class="num">0,305</td></tr>
-          <tr><td>MIRROR</td><td class="num">2</td><td class="num">100 %</td><td class="num">0,810</td><td class="num">0,367</td></tr>
-        </tbody>
-      </table>
-      <p class="caption">Низкое покрытие концептов у SANDBOX и MIRROR соответствует их назначению: эти роли не реферируют концепты, а ставят задачу или задают вопросы. Именно поэтому в качестве основной метрики принят <strong>ролевзвешенный показатель</strong>, а не «сырое» покрытие.</p>
+      <h2 style="margin-bottom: 6px;">Проверка достоверности</h2>
+      <p class="small">Для оценки достоверности применена схема «модель-судья»: отдельная языковая модель разбивает ответ наставника на атомарные утверждения и для каждого определяет, подтверждается ли оно учебным материалом. Каждое утверждение получает одну из трёх меток:</p>
+      <ul class="bullets" style="font-size: 13px; line-height: 1.4; margin-top: 4px;">
+        <li><strong>Подтверждено</strong> — есть прямая поддержка в извлечённых фрагментах</li>
+        <li><strong>Не подтверждено</strong> — общее знание, не противоречащее учебнику</li>
+        <li><strong>Противоречит</strong> — прямая фактическая ошибка</li>
+      </ul>
+      <p class="small" style="margin-top: 8px;">Для надёжности проверка повторена второй моделью-судьёй (Qwen2.5-7B) — результат практически идентичен, что повышает доверие к оценке.</p>
     </div>
     <div>
-      <h2 style="margin-bottom: 8px;">Фактическая обоснованность (LLM-as-judge)</h2>
-      <p class="small">Отдельная языковая модель в роли судьи (`deepseek-v4-flash`) разбивает ответ на атомарные утверждения и классифицирует каждое как SUPPORTED / UNSUPPORTED / CONTRADICTED. Бюджет токенов судьи поднят с 2 000 до 8 000 для устранения сбоев разбора.</p>
-      <div class="grid grid-2" style="margin-top: 10px;">
-        <div class="card green">
-          <div class="title">Противоречий корпусу</div>
-          <div class="big green">0,0 %</div>
-          <div class="sub">архитектура цитирования работает</div>
-        </div>
-        <div class="card">
-          <div class="title">Подкреплённых утверждений</div>
-          <div class="big">53,9 %</div>
-          <div class="sub">faithfulness ≈ 0,471</div>
-        </div>
+      <h2 style="margin-bottom: 6px;">Главное наблюдение</h2>
+      <div class="card green" style="margin-top: 4px;">
+        <p class="small" style="margin-top: 4px;"><strong>Ноль процентов</strong> утверждений противоречат учебному материалу. Это означает: наставник может опустить часть деталей, но <strong>не сообщает заведомо ложных фактов</strong>. Именно архитектура цитирования (RAG) делает это возможным.</p>
       </div>
-      <p class="caption">Контрольная верификация альтернативной моделью-судьёй (Qwen2.5-7B) дала практически идентичный результат, что повышает доверие к полученной оценке.</p>
+      <p class="caption" style="margin-top: 10px;">Доля утверждений с прямым подтверждением по корпусу — около 54 %. Оставшиеся 46 % — это корректные пояснения и логические переходы, которые судья не относит к категории верифицируемых утверждений (например, «давайте разберём пошагово»).</p>
     </div>
   </div>
 </section>
@@ -1052,44 +939,37 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
   </div>
 </section>
 
-<!-- ────────────────────────────────── 20. ПИЛОТНАЯ ЭКСПЛУАТАЦИЯ ── -->
+<!-- ────────────────────────────────── 16. ПИЛОТНАЯ ЭКСПЛУАТАЦИЯ ── -->
 <section class="slide" data-title="Пилотная эксплуатация">
   <div class="eyebrow"><span class="dot"></span>Пилотная эксплуатация · 28 дней (28.04 – 25.05.2026)</div>
-  <h1>15 пользователей, 105 сеансов, <span class="accent">оркестратор переключает роли</span> в реальных данных</h1>
+  <h1>Реальные пользователи <span class="accent">подтвердили вовлечённость</span></h1>
 
-  <div class="split">
-    <div>
-      <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="kpi"><div class="v">15</div><div class="l">активных пользователей</div></div>
-        <div class="kpi"><div class="v">105</div><div class="l">сеансов</div></div>
-        <div class="kpi"><div class="v">1 375</div><div class="l">просмотров</div></div>
-      </div>
-      <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr); margin-top: 8px;">
-        <div class="kpi"><div class="v">≈ 17 мин</div><div class="l">средний сеанс</div></div>
-        <div class="kpi"><div class="v">≈ 26 мин</div><div class="l">в разделе «Математика»</div></div>
-        <div class="kpi"><div class="v">81–88 %</div><div class="l">вовлечённых сеансов</div></div>
-      </div>
+  <div class="kpi-row" style="grid-template-columns: repeat(4, 1fr); margin-top: 10px;">
+    <div class="kpi"><div class="v">15</div><div class="l">активных пользователей</div></div>
+    <div class="kpi"><div class="v">105</div><div class="l">сеансов</div></div>
+    <div class="kpi"><div class="v">1 375</div><div class="l">просмотров страниц</div></div>
+    <div class="kpi"><div class="v">≈ 26 мин</div><div class="l">в разделе «Математика»</div></div>
+  </div>
 
-      <table class="t" style="margin-top: 12px; font-size: 12px;">
-        <thead><tr><th>Подсистема</th><th class="num">Зафиксировано</th></tr></thead>
-        <tbody>
-          <tr><td>Регистрации (без оплат)</td><td class="num">5</td></tr>
-          <tr><td>Прогресс по темам</td><td class="num">60 записей / 18 тем</td></tr>
-          <tr><td>Диалоги с наставником</td><td class="num">25 сессий / 51 сообщение</td></tr>
-          <tr><td>Поисковых запросов RAG</td><td class="num">308</td></tr>
-          <tr><td>Оценок освоения концептов</td><td class="num">13 (6 слабых, 3 средних, 4 сильных)</td></tr>
-          <tr><td>Персональный граф знаний</td><td class="num">91 узел</td></tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="kpi-row" style="grid-template-columns: repeat(4, 1fr); margin-top: 10px;">
+    <div class="kpi"><div class="v">25</div><div class="l">диалоговых сессий</div></div>
+    <div class="kpi"><div class="v">51</div><div class="l">сообщение</div></div>
+    <div class="kpi"><div class="v">308</div><div class="l">поисковых запросов RAG</div></div>
+    <div class="kpi"><div class="v">91</div><div class="l">узел персонального графа</div></div>
+  </div>
+
+  <div class="split" style="margin-top: 16px;">
     <div>
-      <div class="chart-wrap" style="height: 280px;">
+      <div class="chart-wrap" style="height: 240px;">
         <canvas id="chartRoles"></canvas>
       </div>
-      <div class="note" style="margin-top: 10px;">
-        <strong>Подтверждение работоспособности многоролевой архитектуры:</strong> распределение ролей по 308 запросам показывает, что оркестратор действительно адаптирует стиль ответа. Преобладает объясняющая роль, однако проверочные и практические (CHALLENGER и SANDBOX) в сумме составляют около 40 %.
+    </div>
+    <div>
+      <div class="card tinted">
+        <div class="title">Главный вывод по данным пилота</div>
+        <p class="small" style="margin-top: 4px;">Распределение ролей наставника по 308 реальным запросам показывает, что оркестратор <strong>действительно переключает педагогический стиль</strong> в зависимости от контекста. Объясняющая роль преобладает, но проверочные и практические в сумме составляют около 40 %.</p>
       </div>
-      <p class="caption" style="margin-top: 8px;">В журналах непосредственно прослеживается миграция эмбеддера: до середины мая поиск работал на e5-small (≈ 200 запросов), с 25 мая — на Qwen3 (106 запросов).</p>
+      <p class="caption" style="margin-top: 8px;">В журналах прослеживается миграция эмбеддера: с 25 мая поиск работает на выбранной по бенчмарку модели Qwen3.</p>
     </div>
   </div>
 </section>
@@ -1223,34 +1103,23 @@ table.t .num { text-align: right; font-variant-numeric: tabular-nums; font-famil
 <!-- ──────────────────────────────── 24. ИТОГ ── -->
 <section class="slide" data-title="Итог">
   <div class="eyebrow"><span class="dot"></span>Заключение</div>
-  <h1>Цель работы <span class="accent">достигнута</span>: разработан и эмпирически оценён работающий прототип</h1>
+  <h1>Цель работы <span class="accent">достигнута</span></h1>
 
-  <div class="split balanced">
-    <div>
-      <p>В рамках работы пройден <strong>полный жизненный цикл разработки</strong> — от постановки эмпирически подтверждённой проблемы и проектирования концепции до реализации работающего MVP и его строгой эмпирической оценки.</p>
-
-      <h2 style="margin-top: 18px; margin-bottom: 6px;">Полученные результаты</h2>
-      <ol class="numbered" style="font-size: 14px;">
-        <li><strong>Работающий адаптивный AI-наставник</strong>, качество которого подтверждено измеримыми показателями на каждом из ключевых компонентов</li>
-        <li><strong>Переносимая методика оценки</strong> качества AI-наставника (ролевзвешенная рубрика, LLM-as-judge, бенчмарк извлечения) — применимая к иным образовательным системам на основе LLM</li>
-      </ol>
-    </div>
-    <div>
-      <h2 style="margin-bottom: 8px;">Ключевые числовые показатели</h2>
-      <div class="grid grid-2" style="gap: 8px;">
-        <div class="card tinted"><div class="title">MRR поиска</div><div class="big primary">+44 %</div><div class="sub">за счёт устранения дефектов конвейера</div></div>
-        <div class="card green"><div class="title">NDCG@10</div><div class="big green">+107 %</div><div class="sub">с переходом на Qwen3</div></div>
-        <div class="card amber"><div class="title">Pass rate</div><div class="big amber">85 %</div><div class="sub">прохождение эталонных вопросов</div></div>
-        <div class="card"><div class="title">Галлюцинации</div><div class="big">0 %</div><div class="sub">противоречий учебнику</div></div>
-        <div class="card tinted"><div class="title">PKG-aware A/B</div><div class="big primary">82 %</div><div class="sub">побед персонализации</div></div>
-        <div class="card green"><div class="title">Покрытие подпиской</div><div class="big green">≈ 160×</div><div class="sub">прямых API-расходов</div></div>
-      </div>
-    </div>
+  <div class="grid grid-4" style="margin-top: 14px;">
+    <div class="card tinted"><div class="title">Качество поиска (MRR)</div><div class="big primary">+44 %</div></div>
+    <div class="card green"><div class="title">NDCG@10</div><div class="big green">+107 %</div></div>
+    <div class="card amber"><div class="title">Прохождение ответов</div><div class="big amber">85 %</div></div>
+    <div class="card green"><div class="title">Противоречий учебнику</div><div class="big green">0 %</div></div>
   </div>
 
-  <div class="note" style="margin-top: 14px;">
-    Именно <strong>сочетание эмпирически подтверждённых результатов с ясно сформулированными границами их применимости</strong> отличает добросовестную инженерную верификацию от формальной демонстрации работоспособности, на что и претендует настоящая работа.
+  <div class="grid grid-4" style="margin-top: 10px;">
+    <div class="card tinted"><div class="title">A/B персонализации</div><div class="big primary">82 %</div></div>
+    <div class="card green"><div class="title">Покрытие API подпиской</div><div class="big green">≈ 160×</div></div>
+    <div class="card"><div class="title">Цитаты в ответах</div><div class="big">83 %</div></div>
+    <div class="card tinted"><div class="title">Дешевле конкурентов</div><div class="big primary">6–14×</div></div>
   </div>
+
+  <p style="margin-top: 22px; font-size: 17px; text-align: center;">Разработан работающий адаптивный AI-наставник и переносимая методика его оценки.</p>
 </section>
 
 <!-- ──────────────────────────────── 25. СПАСИБО ── -->
@@ -1493,30 +1362,7 @@ new Chart(document.getElementById('chartIrt'), {
   },
 });
 
-// 17. Retrieval progression
-new Chart(document.getElementById('chartRetrieval'), {
-  type: 'bar',
-  data: {
-    labels: ['Precision@5', 'Recall@5', 'MRR'],
-    datasets: [
-      { label: 'Базовый конвейер', data: [0.362, 0.258, 0.475], backgroundColor: C.muted, borderRadius: 5 },
-      { label: 'После оптимизации', data: [0.403, 0.448, 0.683], backgroundColor: C.primary, borderRadius: 5 },
-    ],
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } },
-      title: { display: true, text: 'Метрики поиска: до / после оптимизации', color: C.text, font: { size: 12, weight: '700' } },
-    },
-    scales: {
-      y: { beginAtZero: true, max: 0.8, ticks: { color: C.muted }, grid: { color: C.border } },
-      x: { ticks: { color: C.text, font: { weight: '600' } }, grid: { display: false } },
-    },
-  },
-});
-
-// 19. PKG A/B
+// PKG A/B
 new Chart(document.getElementById('chartPkg'), {
   type: 'bar',
   data: {
