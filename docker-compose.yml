@@ -26,8 +26,12 @@ services:
     image: mindflow-api:local
     container_name: mindflow-api
     restart: unless-stopped
+    # .env подгружается, если присутствует. Без него API стартует,
+    # но запросы к Supabase / DeepSeek работать не будут — это ожидаемо
+    # для просмотра кода без боевых ключей.
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       NODE_ENV: production
       PORT: 8787

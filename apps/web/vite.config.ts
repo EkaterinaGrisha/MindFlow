@@ -15,6 +15,26 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      // Делим бандл, чтобы первый paint не качал 4 МБ JS целиком.
+      // Тяжёлые модули (KaTeX-движок, recharts, dnd-kit, supabase-клиент)
+      // выносим в отдельные чанки — браузер скачивает их параллельно и
+      // кеширует независимо от частых изменений приложения.
+      chunkSizeWarningLimit: 1200,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ['react', 'react-dom', 'react-router-dom'],
+            katex: ['katex', 'react-markdown', 'rehype-katex', 'remark-math', 'remark-gfm'],
+            charts: ['recharts'],
+            dnd: ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
+            supabase: ['@supabase/supabase-js'],
+            icons: ['lucide-react'],
+            motion: ['motion'],
+          },
+        },
+      },
+    },
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
       proxy: env.VITE_API_BASE_URL

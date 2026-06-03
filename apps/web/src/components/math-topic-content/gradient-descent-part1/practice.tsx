@@ -1,17 +1,17 @@
-// @ts-nocheck
 /**
- * Worked-rich (разбор задач) для темы «Градиентный спуск — часть 1».
- * TODO: вставить код по образцу limits-continuity/practice.tsx
- * или derivative-gradient/practice.tsx.
+ * Заглушка разборов задач (worked-rich) для темы «Градиентный спуск — часть 1».
+ * Отображается, пока соответствующий блок практики находится в плане
+ * ближайшего расширения каталога. Полноценные разборы появляются по мере
+ * доведения тем до уровня расширенной интерактивной теории.
  */
 
-export default function GradientDescentPart1WorkedRich({
-  onGoTheory,
-  onGoPractice,
-}: { onGoTheory?: () => void; onGoPractice?: () => void }) {
+export default function GradientDescentPart1WorkedRich(_: {
+  onGoTheory?: () => void;
+  onGoPractice?: () => void;
+}) {
   return (
     <div style={{ padding: 24, fontFamily: "'Inter', sans-serif", color: '#64748b' }}>
-      Разборы для темы «Градиентный спуск — часть 1» скоро появятся.
+      Разборы задач для темы «Градиентный спуск — часть 1» появятся в одном из ближайших обновлений каталога.
     </div>
   );
 }
